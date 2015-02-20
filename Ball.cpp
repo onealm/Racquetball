@@ -28,7 +28,10 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 }
 void Ball::move(const Ogre::FrameEvent& evt) 
 {
+	//Locate the ball
 	Ogre::Vector3 bPosition = ballNode->getPosition();
+
+	//Find direction
 	if (bPosition.y < -playingRoom->getHeight()/2.0f + bRadius && bDirection.y < 0.0f) 
 		bDirection.y = -bDirection.y;
 	if (bPosition.y > playingRoom->getHeight()/2.0f - bRadius && bDirection.y > 0.0f) 
@@ -41,5 +44,7 @@ void Ball::move(const Ogre::FrameEvent& evt)
 		bDirection.x = -bDirection.x;
 	if (bPosition.x > playingRoom->getWidth()/2.0f - bRadius && bDirection.x > 0.0f) 
 		bDirection.x = -bDirection.x;
+
+	//Move the ball
 	ballNode->translate(bSpeed * evt.timeSinceLastFrame * bDirection);
 }

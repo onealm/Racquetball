@@ -19,14 +19,20 @@ Racquetball::~Racquetball(void)
 //---------------------------------------------------------------------------
 void Racquetball::createScene(void)
 {
-    // Create your scene here :)
+    //Ambient Light
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 }
 //---------------------------------------------------------------------------
 
+/*  
+ *  Create Camera
+ *  TODO: Follow Player/Paddle
+ */
 void Racquetball::createCamera(void)
 {
     //Camera Creation
-    mCamera = mSceneMgr->createCamera("MainCam");
+    mCamera = mSceneMgr->createCamera("PlayerCam");
 
     //Set Camera Position 
     mCamera->setPosition(Ogre::Vector3(250,-250,250));
@@ -41,6 +47,10 @@ void Racquetball::createCamera(void)
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);
 }
 
+
+
+
+//FROM TUTORIAL APPLICATION
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
