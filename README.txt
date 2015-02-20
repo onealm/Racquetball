@@ -4,8 +4,8 @@ Game Tech Assignment
 Collaborators:
 
 Melanie O'Neal (mfo264)
-Andrew Vohl ()
-Stephen Ridings ()
+Andrew Vohl (acv563) 
+Stephen Ridings (sjr94)
 
 NOTES:
 Do not push things that aren't already in the repo unless they are new classes we made (Don't push the results of ./buildit or makeit)
