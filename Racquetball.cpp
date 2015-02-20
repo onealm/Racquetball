@@ -23,6 +23,24 @@ void Racquetball::createScene(void)
 }
 //---------------------------------------------------------------------------
 
+void Racquetball::createCamera(void)
+{
+    //Camera Creation
+    mCamera = mSceneMgr->createCamera("MainCam");
+
+    //Set Camera Position 
+    mCamera->setPosition(Ogre::Vector3(250,-250,250));
+
+    //Set Camera Direction
+    mCamera->lookAt(Ogre::Vector3(0,0,0));
+
+    //Set Near Clip Distance
+    mCamera->setNearClipDistance(5);
+ 
+    //Default Camera Controller
+    mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+}
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
