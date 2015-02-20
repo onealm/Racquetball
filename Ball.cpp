@@ -26,6 +26,11 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 	bDirection.normalise();
 	bSpeed = 250.0f;
 }
+
+Ball::~Ball(void)
+{
+}
+
 void Ball::move(const Ogre::FrameEvent& evt) 
 {
 	//Locate the ball
