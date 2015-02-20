@@ -16,11 +16,10 @@ protected:
 	Ogre::Vector3 ballDirection;
 	Ogre::Real ballSpeed;
 	PlayingRoom* playingRoom;
-	Ogre::Real bRadius;
-	Ogre::Real bSpeed;
-	Ogre::Vector3 bDirection;
 public:
-	Ball(Ogre::SceneManager* scnMgr, PlayingRoom* playingRoom);
+	Ball(Ogre::SceneManager* scnMgr);
 	~Ball();
 	void move(const Ogre::FrameEvent& evt);
+	Ogre::SceneNode* getNode() { return ballNode; }
+	void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 };

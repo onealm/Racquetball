@@ -9,7 +9,7 @@ Filename:    Racquetball.h
 #define __Racquetball_h_
 
 #include "BaseApplication.h"
-#include "PlayingRoom.h"
+#include "Ball.h"
 
 //---------------------------------------------------------------------------
 

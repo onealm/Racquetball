@@ -27,6 +27,9 @@ void Racquetball::createScene(void)
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
     playingRoom = new PlayingRoom(mSceneMgr);
+    ball = new Ball(mSceneMgr);
+    //playingRoom->addChild(ball->getNode());
+    ball->setPlayingRoom(playingRoom);
 }
 //---------------------------------------------------------------------------
 
@@ -40,10 +43,10 @@ void Racquetball::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     //Set Camera Position 
-    mCamera->setPosition(Ogre::Vector3(250,-250,250));
+    mCamera->setPosition(Ogre::Vector3(0,200,0));
 
     //Set Camera Direction
-    mCamera->lookAt(Ogre::Vector3(0,0,0));
+    mCamera->lookAt(Ogre::Vector3(0, 500, -200));
 
     //Set Near Clip Distance
     mCamera->setNearClipDistance(5);
