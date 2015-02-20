@@ -20,7 +20,7 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 	ballNode->attachObject(ball);
 	//ballNode->scale(0.1f,0.1f,0.1f);
 
-	//Set ball roperties
+	//Set ball properties
 	bRadius = 10.0f;
 	bDirection = Ogre::Vector3(1.0f, 2.0f, 3.0f);
 	bDirection.normalise();
