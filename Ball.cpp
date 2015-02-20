@@ -8,8 +8,9 @@ Base code taken from class slides.
 
 #include "Ball.h"
 
-Ball::Ball(Ogre::SceneManager* scnMgr) 
+Ball::Ball(Ogre::SceneManager* scnMgr, PlayingRoom* playingRoom) 
 {
+	playingRoom = playingRoom;
 	//Create ball
 	Ogre::Entity* ball = scnMgr->createEntity("Sphere", "sphere.mesh");
 	ball->setMaterialName("BallColor/CubeMap");
@@ -34,7 +35,7 @@ Ball::~Ball(void)
 void Ball::move(const Ogre::FrameEvent& evt) 
 {
 	//Locate the ball
-	Ogre::Vector3 bPosition = ballNode->getPosition();
+	/*Ogre::Vector3 bPosition = ballNode->getPosition();
 
 	//Find direction
 	if (bPosition.y < -playingRoom->getHeight()/2.0f + bRadius && bDirection.y < 0.0f) 
@@ -51,5 +52,5 @@ void Ball::move(const Ogre::FrameEvent& evt)
 		bDirection.x = -bDirection.x;
 
 	//Move the ball
-	ballNode->translate(bSpeed * evt.timeSinceLastFrame * bDirection);
+	ballNode->translate(bSpeed * evt.timeSinceLastFrame * bDirection);*/
 }

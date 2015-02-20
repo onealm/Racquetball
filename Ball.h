@@ -6,6 +6,7 @@ Filename:    Ball.h
 */
 
 #include "BaseApplication.h"
+#include "PlayingRoom.h"
 
 class Ball 
 {
@@ -14,11 +15,12 @@ protected:
 	Ogre::Real ballRadius;
 	Ogre::Vector3 ballDirection;
 	Ogre::Real ballSpeed;
-	PlayingField* playingRoom;
+	PlayingRoom* playingRoom;
+	Ogre::Real bRadius;
+	Ogre::Real bSpeed;
+	Ogre::Vector3 bDirection;
 public:
-	Ball(Ogre::SceneManager* scnMgr);
+	Ball(Ogre::SceneManager* scnMgr, PlayingRoom* playingRoom);
 	~Ball();
 	void move(const Ogre::FrameEvent& evt);
-	Ogre::SceneNode* getNode() { return rootNode; }
-	void setPlayingField(PlayingField * pr) { playingRoom = pr; }
 };

@@ -7,6 +7,9 @@ Filename:    Racquetball.cpp
 
 #include "Racquetball.h"
 
+PlayingRoom *playingRoom;
+Ball *ball;
+
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
 {
@@ -22,6 +25,8 @@ void Racquetball::createScene(void)
     //Ambient Light
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
+    playingRoom = new PlayingRoom(mSceneMgr);
 }
 //---------------------------------------------------------------------------
 
