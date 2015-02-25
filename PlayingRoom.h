@@ -1,3 +1,5 @@
+#ifndef PLAYING_ROOM_H
+#define PLAYING_ROOM_H
 /*
 -----------------------------------------------------------------------------
 Filename:    PlayingRoom.h
@@ -17,3 +19,5 @@ public:
 	float getLength(void);
 	float getWidth(void);
 };
+
+#endif // PLAYING_ROOM_H

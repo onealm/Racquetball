@@ -10,8 +10,10 @@ Filename:    Racquetball.h
 
 #include "BaseApplication.h"
 #include "Ball.h"
+#include "Player.h"
 
 //---------------------------------------------------------------------------
+namespace gTech {
 
 class Racquetball : public BaseApplication
 {
@@ -23,6 +25,8 @@ protected:
     virtual void createScene(void);
     virtual void createCamera(void);
 };
+
+} // namespace gTech
 
 //---------------------------------------------------------------------------
 

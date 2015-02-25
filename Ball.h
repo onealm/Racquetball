@@ -4,9 +4,12 @@ Filename:    Ball.h
 -----------------------------------------------------------------------------
 
 */
+#ifndef BALL_H
+#define BALL_H
 
 #include "BaseApplication.h"
 #include "PlayingRoom.h"
+
 
 class Ball 
 {
@@ -23,3 +26,5 @@ public:
 	Ogre::SceneNode* getNode() { return ballNode; }
 	void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 };
+
+#endif // BALL_H

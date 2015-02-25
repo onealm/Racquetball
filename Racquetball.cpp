@@ -7,8 +7,11 @@ Filename:    Racquetball.cpp
 
 #include "Racquetball.h"
 
+namespace gTech {
+
 PlayingRoom *playingRoom;
 Ball *ball;
+Player *player;
 
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
@@ -27,9 +30,15 @@ void Racquetball::createScene(void)
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
     playingRoom = new PlayingRoom(mSceneMgr);
+
     ball = new Ball(mSceneMgr);
+    player = new Player(mSceneMgr);
+
     //playingRoom->addChild(ball->getNode());
+    //playingRoom->addChild(player->getNode());
+
     ball->setPlayingRoom(playingRoom);
+    player->setPlayingRoom(playingRoom);
 }
 //---------------------------------------------------------------------------
 
@@ -55,7 +64,7 @@ void Racquetball::createCamera(void)
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);
 }
 
-
+} // namespace gTech
 
 
 
@@ -66,7 +75,7 @@ extern "C" {
 int main(int argc, char *argv[])
     {
         // Create application object
-        Racquetball app;
+        gTech::Racquetball app;
 
         try {
             app.go();
