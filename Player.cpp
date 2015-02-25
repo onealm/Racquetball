@@ -6,12 +6,14 @@ Player::Player(Ogre::SceneManager* scnMgr)
 {
 	//Create ball
 	Ogre::Entity* player = scnMgr->createEntity("Player", "ninja.mesh");
-	player->setMaterialName("BallColor/CubeMap");
+
 	player->setCastShadows(true);
 
 	//Attach ball to node
 	playerNode = scnMgr->getRootSceneNode()->createChildSceneNode("scenePlayer", Ogre::Vector3(0, 0, 0));
 	playerNode->attachObject(player);
+
+
 	//playerNode->scale(0.1f,0.1f,0.1f);
 
 	//Set ball properties
@@ -25,27 +27,37 @@ Player::~Player(void)
 {
 }
 
-// void Player::move(const Ogre::FrameEvent& evt) 
+// void Player::frameRenderingQueued(const Ogre::FrameEvent& evt) 
 // {
-// 	//Locate the ball
-// 	Ogre::Vector3 bPosition = playerNode->getPosition();
+// 	bool ret = BaseApplication::frameRenderingQueued(evt);
 
-// 	//Find direction
-// 	if (bPosition.y < -playingRoom->getHeight()/2.0f + bRadius && bDirection.y < 0.0f) 
-// 		bDirection.y = -bDirection.y;
-// 	if (bPosition.y > playingRoom->getHeight()/2.0f - bRadius && bDirection.y > 0.0f) 
-// 		bDirection.y = -bDirection.y;
-// 	if (bPosition.z < -playingRoom->getLength()/2.0f + bRadius && bDirection.z < 0.0f) 
-// 		bDirection.z = -bDirection.z;
-// 	if (bPosition.z > playingRoom->getLength()/2.0f - bRadius && bDirection.z > 0.0f) 
-// 		bDirection.z = -bDirection.z;
-// 	if (bPosition.x < -playingRoom->getWidth()/2.0f + bRadius && bDirection.x < 0.0f) 
-// 		bDirection.x = -bDirection.x;
-// 	if (bPosition.x > playingRoom->getWidth()/2.0f - bRadius && bDirection.x > 0.0f) 
-// 		bDirection.x = -bDirection.x;
+// 	if (!processUnbufferedInput(evt))
+// 		return false;
 
-// 	//Move the ball
-// 	playerNode->translate(bSpeed * evt.timeSinceLastFrame * bDirection);
+// 	return ret;
+
+	
+// }
+
+// bool Player::processUnbufferedInput(const Ogre::FrameEvent& evt)
+// {
+//     static Ogre::Real mToggle = 0.0;    // The time left until next toggle
+//     static Ogre::Real mRotate = 0.13;   // The rotate constant
+//     static Ogre::Real mMove = 250;
+
+//     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+
+// 	if (mKeyboard->isKeyDown(OIS::KC_I)) // Forward
+// 	{
+//     	transVector.z -= mMove;
+// 	}
+// 	if (mKeyboard->isKeyDown(OIS::KC_K)) // Backward
+// 	{
+// 	    transVector.z += mMove;
+// 	}
+
+// 	mSceneMgr->getSceneNode("NinjaNode")->translate
+// 		(mSceneMgr->getSceneNode("NinjaNode")->getOrientation() * transVector * evt.timeSinceLastFrame, Ogre::Node::TS_WORLD);
 // }
 
 } // namespace gTech

@@ -15,10 +15,12 @@ class Ball
 {
 protected:
 	Ogre::SceneNode* ballNode;
-	Ogre::Real ballRadius;
-	Ogre::Vector3 ballDirection;
-	Ogre::Real ballSpeed;
+	Ogre::Real bRadius;
+	Ogre::Vector3 bDirection;
+	Ogre::Real bSpeed;
 	PlayingRoom* playingRoom;
+	float bWidth;
+	float bLength;
 public:
 	Ball(Ogre::SceneManager* scnMgr);
 	~Ball();

@@ -17,6 +17,10 @@ Ogre::Real rLength = 4000;
 
 PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr) 
 {
+    uHeight = rHeight;
+    uWidth = rWidth;
+    uLength = rLength;
+    
 	Ogre::Plane pFloor(Ogre::Vector3::UNIT_Y, 0);
     Ogre::Plane pCeiling(-Ogre::Vector3::UNIT_Y, 0);
     Ogre::Plane pWall1(-Ogre::Vector3::UNIT_X, 0);

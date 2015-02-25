@@ -17,7 +17,8 @@ class Player
 	public:
 		Player(Ogre::SceneManager* scnMgr);
 		~Player();
-		void move(const Ogre::FrameEvent& evt);
+		void frameRenderingQueued(const Ogre::FrameEvent& evt);
+		bool processUnbufferedInput(const Ogre::FrameEvent& evt);
 		Ogre::SceneNode* getNode() { return playerNode; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 };

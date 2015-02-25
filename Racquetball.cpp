@@ -29,6 +29,14 @@ void Racquetball::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
+    // Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
+    // spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+    // spotLight->setDiffuseColour(0, 0, 1.0);
+    // spotLight->setSpecularColour(0, 0, 1.0);
+
+    // spotLight->setDirection(-1, -1, 0);
+    // spotLight->setPosition(Ogre::Vector3(300, 300, 0));
+
     playingRoom = new PlayingRoom(mSceneMgr);
 
     ball = new Ball(mSceneMgr);
@@ -52,10 +60,10 @@ void Racquetball::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     //Set Camera Position 
-    mCamera->setPosition(Ogre::Vector3(0,200,0));
+    mCamera->setPosition(Ogre::Vector3(0,500,900));
 
     //Set Camera Direction
-    mCamera->lookAt(Ogre::Vector3(0, 500, -200));
+    mCamera->lookAt(Ogre::Vector3(0, 200, -700));
 
     //Set Near Clip Distance
     mCamera->setNearClipDistance(5);
