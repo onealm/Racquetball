@@ -64,7 +64,6 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr)
 
 PlayingRoom::~PlayingRoom(void)
 {
-
 }
 
 float getHeight(void)

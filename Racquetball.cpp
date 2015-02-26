@@ -42,8 +42,11 @@ void Racquetball::createScene(void)
     ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
 
-    //playingRoom->addChild(ball->getNode());
-    //playingRoom->addChild(player->getNode());
+    mCamera->setAutoTracking(true, mSceneMgr->getSceneNode("Player"));
+
+
+    // playingRoom->addChild(ball->getNode());
+    // playingRoom->addChild(player->getNode());
 
     ball->setPlayingRoom(playingRoom);
     player->setPlayingRoom(playingRoom);
@@ -60,16 +63,58 @@ void Racquetball::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     //Set Camera Position 
-    mCamera->setPosition(Ogre::Vector3(0,500,900));
+    mCamera->setPosition(Ogre::Vector3(0,1000,1000));
 
     //Set Camera Direction
-    mCamera->lookAt(Ogre::Vector3(0, 200, -700));
+    mCamera->lookAt(Ogre::Vector3(0, 700, -1000));
 
     //Set Near Clip Distance
     mCamera->setNearClipDistance(5);
  
     //Default Camera Controller
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+}
+
+bool Racquetball::frameRenderingQueued(const Ogre::FrameEvent& evt) 
+{
+    bool ret = BaseApplication::frameRenderingQueued(evt);
+
+    if (!processUnbufferedInput(evt))
+        return false;
+
+    return ret; 
+}
+
+bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
+{
+    static Ogre::Real mToggle = 0.0;    // The time left until next toggle
+    static Ogre::Real mRotate = 0.13;   // The rotate constant
+    static Ogre::Real mMove = 500;
+
+    bool moved = false;
+
+    Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+
+    if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+    {
+        transVector.z -= mMove;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+    {
+        transVector.z += mMove;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_A)) // Forward
+    {
+        transVector.x -= mMove;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_D)) // Backward
+    {
+        transVector.x += mMove;
+    }
+
+    mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+
+    return true;
 }
 
 } // namespace gTech

@@ -17,13 +17,17 @@ namespace gTech {
 
 class Racquetball : public BaseApplication
 {
-public:
-    Racquetball(void);
-    virtual ~Racquetball(void);
+	public:
+	    Racquetball(void);
+	    virtual ~Racquetball(void);
 
-protected:
-    virtual void createScene(void);
-    virtual void createCamera(void);
+	protected:
+	    virtual void createScene(void);
+	    virtual void createCamera(void);
+	    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+	private:
+		virtual bool processUnbufferedInput(const Ogre::FrameEvent& evt);
 };
 
 } // namespace gTech

@@ -6,7 +6,7 @@
 
 namespace gTech {
 
-class Player 
+class Player
 {
 	protected:
 		Ogre::SceneNode* playerNode;
@@ -17,8 +17,6 @@ class Player
 	public:
 		Player(Ogre::SceneManager* scnMgr);
 		~Player();
-		void frameRenderingQueued(const Ogre::FrameEvent& evt);
-		bool processUnbufferedInput(const Ogre::FrameEvent& evt);
 		Ogre::SceneNode* getNode() { return playerNode; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 };

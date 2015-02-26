@@ -13,7 +13,7 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 
 	//Create ball
 	Ogre::Entity* ball = scnMgr->createEntity("Sphere", "sphere.mesh");
-	ball->setMaterialName("BallColor/CubeMap");
+	ball->setMaterialName("Ogre/Eyes");
 	ball->setCastShadows(true);
 
 	//Attach ball to node
@@ -35,7 +35,7 @@ Ball::~Ball(void)
 
 void Ball::move(const Ogre::FrameEvent& evt) 
 {
-	//Locate the ball
+
 	Ogre::Vector3 bPosition = ballNode->getPosition();
 	PlayingRoom* playingRoom = this->playingRoom;
 

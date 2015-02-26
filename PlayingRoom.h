@@ -10,18 +10,18 @@ Filename:    PlayingRoom.h
 
 class PlayingRoom
 {
-protected:
-	
+	protected:
+		
 
-public:
-	PlayingRoom(Ogre::SceneManager* scnMgr);
-	~PlayingRoom();
-	float uHeight;
-	float uLength;
-	float uWidth;
-	float getHeight(void);
-	float getLength(void);
-	float getWidth(void);
+	public:
+		PlayingRoom(Ogre::SceneManager* scnMgr);
+		~PlayingRoom();
+		float uHeight;
+		float uLength;
+		float uWidth;
+		float getHeight(void);
+		float getLength(void);
+		float getWidth(void);
 };
 
 #endif // PLAYING_ROOM_H
