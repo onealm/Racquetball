@@ -22,9 +22,13 @@ class Racquetball : public BaseApplication
 	    virtual ~Racquetball(void);
 
 	protected:
+		virtual void createFrameListener(void);
 	    virtual void createScene(void);
 	    virtual void createCamera(void);
 	    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+	    virtual void moveBall(const Ogre::FrameEvent& evt);
+	    //GUI
+	    OgreBites::Label* scoreLabel;
 
 	private:
 		virtual bool processUnbufferedInput(const Ogre::FrameEvent& evt);

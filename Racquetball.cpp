@@ -84,6 +84,14 @@ bool Racquetball::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     return ret; 
 }
+void Racquetball::createFrameListener(void)
+{
+    BaseApplication::createFrameListener();
+    
+    //Label for score. Change with setCaption(const Ogre::DisplayString& caption)
+    scoreLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "ScoreLabel", "Score: 0", 200);
+ 
+}
 
 bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
 {
@@ -91,7 +99,7 @@ bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     static Ogre::Real mRotate = 0.13;   // The rotate constant
     static Ogre::Real mMove = 500;
 
-    bool moved = false;
+    moveBall(evt);
 
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
@@ -115,6 +123,32 @@ bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
     return true;
+}
+void Racquetball::moveBall(const Ogre::FrameEvent& evt) 
+{
+
+    Ogre::SceneNode* ballNode = mSceneMgr->getSceneNode("Ball");
+    Ogre::Vector3 bPosition = ballNode->getPosition();
+
+
+    
+
+    //Find direction
+    if (bPosition.y < -playingRoom->uHeight/2.0f + ball->bRadius && ball->bDirection.y < 0.0f) 
+        ball->bDirection.y = -ball->bDirection.y;
+    if (bPosition.y > playingRoom->uHeight/2.0f - ball->bRadius && ball->bDirection.y > 0.0f) 
+        ball->bDirection.y = -ball->bDirection.y;
+    if (bPosition.z < -playingRoom->uLength/2.0f + ball->bRadius && ball->bDirection.z < 0.0f) 
+        ball->bDirection.z = -ball->bDirection.z;
+    if (bPosition.z > playingRoom->uLength/2.0f - ball->bRadius && ball->bDirection.z > 0.0f) 
+        ball->bDirection.z = -ball->bDirection.z;
+    if (bPosition.x < -playingRoom->uWidth/2.0f + ball->bRadius && ball->bDirection.x < 0.0f) 
+        ball->bDirection.x = -ball->bDirection.x;
+    if (bPosition.x > playingRoom->uWidth/2.0f - ball->bRadius && ball->bDirection.x > 0.0f) 
+        ball->bDirection.x = -ball->bDirection.x;
+
+    //Move the ball
+    ballNode->translate(ball->bSpeed * evt.timeSinceLastFrame * ball->bDirection);
 }
 
 } // namespace gTech
