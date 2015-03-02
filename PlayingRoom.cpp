@@ -48,7 +48,7 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr)
     Ogre::Entity *rWall4 = scnMgr->createEntity("rWall4", "pWall4");
     scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, rHeight/2, -rLength/2-rLength/8))->attachObject(rWall4);
 
-    rFloor->setMaterialName("Examples/Rockwall");
+    rFloor->setMaterialName("Gym_Floor");
     rFloor->setCastShadows(true);
     rCeiling->setMaterialName("Examples/Rockwall");
     rCeiling->setCastShadows(true);
