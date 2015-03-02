@@ -1,4 +1,5 @@
 #ignoring Makefiles
+.deps/
 .deps/Racquetball-Ball.Po
 .deps/Racquetball-BaseApplication.Po
 .deps/Racquetball-PlayingRoom.Po
@@ -9,6 +10,7 @@ Ogre.log
 Racquetball
 Racquetball-Ball.o
 Racquetball-BaseApplication.o
+Racquetball-Player.o
 Racquetball-PlayingRoom.o
 Racquetball-Racquetball.o
 aclocal.m4
