@@ -37,13 +37,19 @@ void Racquetball::createScene(void)
     // spotLight->setDirection(-1, -1, 0);
     // spotLight->setPosition(Ogre::Vector3(300, 300, 0));
 
+    //Set Up Room
     playingRoom = new PlayingRoom(mSceneMgr);
-
     ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
 
-    mCamera->setAutoTracking(true, mSceneMgr->getSceneNode("Player"));
-
+    /*Watch the Player
+     *TODO:
+     *Can still move mouse camera for now. Helps to see scene.
+     *Eventually add a bit of outside scenery (waiting room) to see through "glass pane"
+     *Have to be able to place camera outside of room to see player well enough 
+     */
+    //mCamera->setAutoTracking(true, mSceneMgr->getSceneNode("Player")); 
+    mSceneMgr->getSceneNode("Player")->attachObject(mCamera);
 
     // playingRoom->addChild(ball->getNode());
     // playingRoom->addChild(player->getNode());
@@ -53,20 +59,17 @@ void Racquetball::createScene(void)
 }
 //---------------------------------------------------------------------------
 
-/*  
- *  Create Camera
- *  TODO: Follow Player/Paddle
- */
+//Create Camera
 void Racquetball::createCamera(void)
 {
     //Camera Creation
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     //Set Camera Position 
-    mCamera->setPosition(Ogre::Vector3(0,1000,1000));
+    mCamera->setPosition(Ogre::Vector3(0, 400, 1750));
 
     //Set Camera Direction
-    mCamera->lookAt(Ogre::Vector3(0, 700, -1000));
+    mCamera->lookAt(Ogre::Vector3(0, 750, -1000));
 
     //Set Near Clip Distance
     mCamera->setNearClipDistance(5);
@@ -129,9 +132,6 @@ void Racquetball::moveBall(const Ogre::FrameEvent& evt)
 
     Ogre::SceneNode* ballNode = mSceneMgr->getSceneNode("Ball");
     Ogre::Vector3 bPosition = ballNode->getPosition();
-
-
-    
 
     //Find direction
     if (bPosition.y < -playingRoom->uHeight/2.0f + ball->bRadius && ball->bDirection.y < 0.0f) 

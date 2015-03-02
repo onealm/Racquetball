@@ -21,6 +21,7 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr)
     uWidth = rWidth;
     uLength = rLength;
     
+    //Create Room Planes
 	Ogre::Plane pFloor(Ogre::Vector3::UNIT_Y, 0);
     Ogre::Plane pCeiling(-Ogre::Vector3::UNIT_Y, 0);
     Ogre::Plane pWall1(-Ogre::Vector3::UNIT_X, 0);
@@ -35,6 +36,8 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr)
     Ogre::MeshManager::getSingleton().createPlane("pWall3", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, pWall3, rWidth, rHeight, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Y);
     Ogre::MeshManager::getSingleton().createPlane("pWall4", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, pWall4, rWidth, rHeight, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Y);
 
+
+    //Create Plane Entities and Set Them
     Ogre::Entity *rFloor = scnMgr->createEntity("rFloor", "pFloor");
     scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 0, -rLength/8))->attachObject(rFloor);
     Ogre::Entity *rCeiling = scnMgr->createEntity("rCeiling", "pCeiling");
@@ -48,17 +51,18 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr)
     Ogre::Entity *rWall4 = scnMgr->createEntity("rWall4", "pWall4");
     scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, rHeight/2, -rLength/2-rLength/8))->attachObject(rWall4);
 
+    //Set Textures
     rFloor->setMaterialName("Gym_Floor");
     rFloor->setCastShadows(true);
-    rCeiling->setMaterialName("Examples/Rockwall");
+    rCeiling->setMaterialName("Ceiling");
     rCeiling->setCastShadows(true);
-    rWall1->setMaterialName("Examples/Rockwall");
+    rWall1->setMaterialName("Side_Walls");
     rWall1->setCastShadows(true);
-    rWall2->setMaterialName("Examples/Rockwall");
+    rWall2->setMaterialName("Side_Walls");
     rWall2->setCastShadows(true);
-    rWall3->setMaterialName("Examples/Rockwall");
+    rWall3->setMaterialName("White_Wall");
     rWall3->setCastShadows(true);
-    rWall4->setMaterialName("Examples/Rockwall");
+    rWall4->setMaterialName("White_Wall");
     rWall4->setCastShadows(true);
 }
 

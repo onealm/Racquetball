@@ -12,3 +12,48 @@ material Gym_Floor
 		}
 	}
 }
+
+material White_Wall
+{
+	technique
+	{
+		pass
+		{
+			diffuse 1 1 1 1.0
+			texture_unit
+			{
+				texture white_wall.png
+			}
+		}
+	}
+}
+
+material Ceiling
+{
+	technique
+	{
+		pass
+		{
+			diffuse 1 1 1 1.0
+			texture_unit
+			{
+				texture ceiling.jpg
+			}
+		}
+	}
+}
+
+material Side_Walls
+{
+	technique
+	{
+		pass
+		{
+			diffuse 1 1 1 1.0
+			texture_unit
+			{
+				texture side_walls.jpg
+			}
+		}
+	}
+}

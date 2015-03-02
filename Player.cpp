@@ -14,7 +14,7 @@ Player::Player(Ogre::SceneManager* scnMgr)
 	playerNode->attachObject(player);
 
 
-	//playerNode->scale(0.1f,0.1f,0.1f);
+	playerNode->scale(2.5f, 2.5f, 2.5f);
 
 	//Set ball properties
 	// ballRadius = 10.0f;
