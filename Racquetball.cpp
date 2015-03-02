@@ -29,6 +29,15 @@ void Racquetball::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
+    //Create Point Light
+    Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
+    pointLight->setType(Ogre::Light::LT_POINT);
+    pointLight->setPosition(Ogre::Vector3(0, 2000, 0));
+
+    pointLight->setDiffuseColour(1.0, 1.0, 1.0);
+    pointLight->setSpecularColour(1.0, 1.0, 1.0);
+
+
     // Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
     // spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
     // spotLight->setDiffuseColour(0, 0, 1.0);
