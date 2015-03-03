@@ -11,9 +11,6 @@ height desribes ydir
 width describes xdir
 length describes zdir
 */
-Ogre::Real rHeight = 2000;
-Ogre::Real rWidth = 2000;
-Ogre::Real rLength = 4000;
 
 Paddle::Paddle(Ogre::SceneManager* scnMgr) 
 { 
