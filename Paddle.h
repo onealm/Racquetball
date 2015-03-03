@@ -14,7 +14,7 @@ class Paddle
 		
 
 	public:
-		Paddle(Ogre::SceneManager* scnMgr);
+		Paddle(Ogre::SceneManager* scnMgr, Ogre::SceneNode* playerNode);
 		~Paddle();
 };
 

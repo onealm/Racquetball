@@ -12,7 +12,7 @@ namespace gTech {
 PlayingRoom *playingRoom;
 Ball *ball;
 Player *player;
-Paddle *paddle;
+Paddle *bigPaddle;
 
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
@@ -51,7 +51,11 @@ void Racquetball::createScene(void)
     playingRoom = new PlayingRoom(mSceneMgr);
     ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
-    //paddle = new Paddle(mSceneMgr);
+
+    //Player Node
+    Ogre::SceneNode* playerNode = mSceneMgr->getSceneNode("Player");
+
+    bigPaddle = new Paddle(mSceneMgr, playerNode);
 
     /*Watch the Player
      *TODO:
@@ -61,6 +65,8 @@ void Racquetball::createScene(void)
      */
     //mCamera->setAutoTracking(true, mSceneMgr->getSceneNode("Player")); 
     mSceneMgr->getSceneNode("Player")->attachObject(mCamera);
+
+    //mSceneMgr->getSceneNode("Player")->attachObject(mSceneMgr->getSceneNode("Paddle"));
 
     // playingRoom->addChild(ball->getNode());
     // playingRoom->addChild(player->getNode());

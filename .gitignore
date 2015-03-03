@@ -10,6 +10,7 @@ Ogre.log
 Racquetball
 Racquetball-Ball.o
 Racquetball-BaseApplication.o
+Racquetball-Paddle.o
 Racquetball-Player.o
 Racquetball-PlayingRoom.o
 Racquetball-Racquetball.o
