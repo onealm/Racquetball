@@ -11,6 +11,7 @@ Filename:    Racquetball.h
 #include "BaseApplication.h"
 #include "Ball.h"
 #include "Player.h"
+#include "Paddle.h"
 
 //---------------------------------------------------------------------------
 namespace gTech {
@@ -27,6 +28,7 @@ class Racquetball : public BaseApplication
 	    virtual void createCamera(void);
 	    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 	    virtual void moveBall(const Ogre::FrameEvent& evt);
+	    
 	    //GUI
 	    OgreBites::Label* scoreLabel;
 

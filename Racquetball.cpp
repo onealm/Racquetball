@@ -12,6 +12,7 @@ namespace gTech {
 PlayingRoom *playingRoom;
 Ball *ball;
 Player *player;
+Paddle *paddle;
 
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
@@ -50,6 +51,7 @@ void Racquetball::createScene(void)
     playingRoom = new PlayingRoom(mSceneMgr);
     ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
+    //paddle = new Paddle(mSceneMgr);
 
     /*Watch the Player
      *TODO:
