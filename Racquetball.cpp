@@ -41,6 +41,8 @@ void Racquetball::createScene(void)
 
     //Sound
     gameSound = new Sound(mSceneMgr);
+    gameSound->setBackgroundMusic();
+    
 
     // Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
     // spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
@@ -134,13 +136,18 @@ bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     {
         transVector.z += mMove;
     }
-    if (mKeyboard->isKeyDown(OIS::KC_A)) // Forward
+    if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
     {
         transVector.x -= mMove;
     }
-    if (mKeyboard->isKeyDown(OIS::KC_D)) // Backward
+    if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
     {
         transVector.x += mMove;
+        //gameSound->playSwoosh();
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_P)) // Right
+    {
+        gameSound->toggleBackground();
     }
 
     mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
