@@ -13,6 +13,7 @@ PlayingRoom *playingRoom;
 Ball *ball;
 Player *player;
 Paddle *bigPaddle;
+Sound *gameSound;
 
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
@@ -38,6 +39,8 @@ void Racquetball::createScene(void)
     pointLight->setDiffuseColour(1.0, 1.0, 1.0);
     pointLight->setSpecularColour(1.0, 1.0, 1.0);
 
+    //Sound
+    gameSound = new Sound(mSceneMgr);
 
     // Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
     // spotLight->setType(Ogre::Light::LT_SPOTLIGHT);

@@ -12,6 +12,7 @@ Filename:    Racquetball.h
 #include "Ball.h"
 #include "Player.h"
 #include "Paddle.h"
+#include "Sound.h"
 
 //---------------------------------------------------------------------------
 namespace gTech {

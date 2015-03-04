@@ -14,6 +14,7 @@ Racquetball-Paddle.o
 Racquetball-Player.o
 Racquetball-PlayingRoom.o
 Racquetball-Racquetball.o
+Racquetball-Sound.o
 aclocal.m4
 autom4te.cache/output.0
 autom4te.cache/output.1
@@ -42,4 +43,7 @@ m4/lt~obsolete.m4
 missing
 ogre.cfg
 stamp-h1
+
+#temporary
+rain-01.wav
 
