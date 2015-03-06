@@ -7,6 +7,7 @@ Filename:    PlayingRoom.h
 */
 
 #include "BaseApplication.h"
+#include <btBulletDynamicsCommon.h>
 
 class PlayingRoom
 {
@@ -14,8 +15,11 @@ class PlayingRoom
 		
 
 	public:
-		PlayingRoom(Ogre::SceneManager* scnMgr);
+		PlayingRoom(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld);
 		~PlayingRoom();
+
+		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld, Ogre::Vector3 norm);
+
 		float uHeight;
 		float uLength;
 		float uWidth;

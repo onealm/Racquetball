@@ -8,7 +8,7 @@ Base code taken from class slides.
 
 #include "Ball.h"
 
-Ball::Ball(Ogre::SceneManager* scnMgr) 
+Ball::Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld) 
 {
 
 	//Create ball
@@ -23,14 +23,32 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 
 	//Set ball properties
 	bRadius = 20.0f;
-    bDirection = Ogre::Vector3(1.0f, 2.0f, 3.0f);
-    bDirection.normalise();
-    bSpeed = 600.0f;
 
+    addToWorld(ballNode, ourWorld);
 }
 
 Ball::~Ball(void)
 {
 }
 
+void Ball::addToWorld(Ogre::SceneNode *newBtBode, btDiscreteDynamicsWorld *ourWorld)
+{
+	Ogre::Vector3 pos = newBtBode->getPosition();
+	Ogre::Quaternion qt = newBtBode->getOrientation();
+	btScalar mass(10.0f);
+	btVector3 localInertia(0, 0, 0);
 
+	btCollisionShape *shape = new btSphereShape(btScalar(bRadius));
+	btTransform transform;
+	transform.setIdentity();
+	transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
+	transform.setRotation(btQuaternion(qt.x, qt.y, qt.z, qt.w));
+	shape->calculateLocalInertia(mass, localInertia);
+	btDefaultMotionState *motionState = new btDefaultMotionState(transform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
+	rbInfo.m_restitution = 1;
+	rbInfo.m_friction = 0;
+	ballBody = new btRigidBody(rbInfo);
+	ballBody->setUserPointer((void *)(newBtBode));
+	ourWorld->addRigidBody(ballBody);
+}
