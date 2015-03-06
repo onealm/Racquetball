@@ -23,6 +23,9 @@ public:
 	~Sound();
 	void toggleBackground();
 	void setBackgroundMusic();
+	void playHit();
+	void playHit2();
+	void playScore();
 	void playSwoosh();
 };
 

@@ -14,6 +14,8 @@ Ball *ball;
 Player *player;
 Paddle *bigPaddle;
 Sound *gameSound;
+int time;
+int score;
 
 //---------------------------------------------------------------------------
 Racquetball::Racquetball(void)
@@ -27,6 +29,8 @@ Racquetball::~Racquetball(void)
 //---------------------------------------------------------------------------
 void Racquetball::createScene(void)
 {
+    time = 0;
+    score = 0;
     //Ambient Light
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -42,15 +46,6 @@ void Racquetball::createScene(void)
     //Sound
     gameSound = new Sound(mSceneMgr);
     gameSound->setBackgroundMusic();
-    
-
-    // Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
-    // spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-    // spotLight->setDiffuseColour(0, 0, 1.0);
-    // spotLight->setSpecularColour(0, 0, 1.0);
-
-    // spotLight->setDirection(-1, -1, 0);
-    // spotLight->setPosition(Ogre::Vector3(300, 300, 0));
 
     //Set Up Room
     playingRoom = new PlayingRoom(mSceneMgr);
@@ -114,7 +109,7 @@ void Racquetball::createFrameListener(void)
     BaseApplication::createFrameListener();
     
     //Label for score. Change with setCaption(const Ogre::DisplayString& caption)
-    scoreLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "ScoreLabel", "Score: 0", 200);
+    scoreLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "ScoreLabel", "Score: 0", 400);
  
 }
 
@@ -123,6 +118,7 @@ bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     static Ogre::Real mToggle = 0.0;    // The time left until next toggle
     static Ogre::Real mRotate = 0.13;   // The rotate constant
     static Ogre::Real mMove = 500;
+    time++;
 
     moveBall(evt);
 
@@ -131,23 +127,41 @@ bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
     {
         transVector.z -= mMove;
+        gameSound->playSwoosh();
     }
     if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
     {
         transVector.z += mMove;
+        //gameSound->playHit(); //REMOVE
     }
     if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
     {
         transVector.x -= mMove;
+        //gameSound->playHit2(); //REMOVE
     }
     if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
     {
         transVector.x += mMove;
-        //gameSound->playSwoosh();
+        //gameSound->playScore(); //REMOVE
     }
     if (mKeyboard->isKeyDown(OIS::KC_P)) // Right
     {
         gameSound->toggleBackground();
+    }
+    //Temporary Score Workaround
+    if (time >= 1500)
+    {
+        time = 0;
+        score++;
+        gameSound->playScore();
+
+        Ogre::stringstream ss;
+        ss << score;
+        std::string str = ss.str();
+
+        std::string s = "Score: " + str;
+
+        scoreLabel->setCaption(Ogre::DisplayString(s)); 
     }
 
     mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
@@ -161,18 +175,36 @@ void Racquetball::moveBall(const Ogre::FrameEvent& evt)
     Ogre::Vector3 bPosition = ballNode->getPosition();
 
     //Find direction
-    if (bPosition.y < -playingRoom->uHeight/2.0f + ball->bRadius && ball->bDirection.y < 0.0f) 
+    if (bPosition.y < -playingRoom->uHeight/4.0f + ball->bRadius + playingRoom->uHeight/4.0f && ball->bDirection.y < 0.0f)
+    { 
         ball->bDirection.y = -ball->bDirection.y;
-    if (bPosition.y > playingRoom->uHeight/2.0f - ball->bRadius && ball->bDirection.y > 0.0f) 
+        gameSound->playHit();
+    }
+    if (bPosition.y > playingRoom->uHeight - ball->bRadius && ball->bDirection.y > 0.0f) 
+    {
         ball->bDirection.y = -ball->bDirection.y;
-    if (bPosition.z < -playingRoom->uLength/2.0f + ball->bRadius && ball->bDirection.z < 0.0f) 
+        gameSound->playHit();
+    }
+    if (bPosition.z < -playingRoom->uLength/2.0f + ball->bRadius - playingRoom->uLength/8.0f && ball->bDirection.z < 0.0f) 
+    {
         ball->bDirection.z = -ball->bDirection.z;
-    if (bPosition.z > playingRoom->uLength/2.0f - ball->bRadius && ball->bDirection.z > 0.0f) 
+        gameSound->playHit();
+    }
+    if (bPosition.z > playingRoom->uLength/2.0f - ball->bRadius - playingRoom->uLength/8.0f && ball->bDirection.z > 0.0f) 
+    {
         ball->bDirection.z = -ball->bDirection.z;
+        gameSound->playHit();
+    }
     if (bPosition.x < -playingRoom->uWidth/2.0f + ball->bRadius && ball->bDirection.x < 0.0f) 
+    {
         ball->bDirection.x = -ball->bDirection.x;
+        gameSound->playHit();
+    }
     if (bPosition.x > playingRoom->uWidth/2.0f - ball->bRadius && ball->bDirection.x > 0.0f) 
+    {
         ball->bDirection.x = -ball->bDirection.x;
+        gameSound->playHit();
+    }
 
     //Move the ball
     ballNode->translate(ball->bSpeed * evt.timeSinceLastFrame * ball->bDirection);

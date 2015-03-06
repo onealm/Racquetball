@@ -3,7 +3,7 @@
 Filename:    Sound.cpp
 -----------------------------------------------------------------------------
 
-Much code taken from SDL tutorials (init,)
+Much code taken from SDL tutorials (init, load_files, clean_up)
 */
 
 #include "Sound.h"
@@ -11,11 +11,10 @@ Much code taken from SDL tutorials (init,)
 //The music that will be played 
 Mix_Music* music = NULL;
 
-
-
 //The sound effects that will be used 
-Mix_Chunk *score = NULL; 
 Mix_Chunk *hit = NULL; 
+Mix_Chunk *hit2 = NULL;
+Mix_Chunk *score = NULL; 
 Mix_Chunk *swoosh = NULL;
 
 Sound::Sound(Ogre::SceneManager* scnMgr) 
@@ -63,26 +62,52 @@ bool Sound::load_files()
 
 
 	//Load the sound effects 
-	score = Mix_LoadWAV( "magic-chime-01.mp3" ); 
-	hit = Mix_LoadWAV( "tennis_ball_bounce_on_racket_001.mp3" ); 
-	swoosh = Mix_LoadWAV( "tennis_racket_fast_movement_swoosh_002.mp3" ); 
+	hit = Mix_LoadWAV( "tennis_ball_bounce_on_racket_001.wav" );
+	hit2 = Mix_LoadWAV("tennis_ball_bounce_on_racket_002.wav");
+	score = Mix_LoadWAV( "magic-chime-01.wav" ); 
+	swoosh = Mix_LoadWAV( "tennis_racket_fast_movement_swoosh_002.wav" ); 
 
 	//If there was a problem loading the sound effects 
 	if(( score == NULL ) || ( hit == NULL ) || ( swoosh == NULL ) ) 
 	{ 
+		printf("THERE WAS A PROBLEM LOADING THE SOUND EFFECTS! \n\n\n\n");
 		return false; 
 	} 
 
 	//If everything loaded fine 
 	return true; 
 }
-void Sound::playSwoosh()
+
+void Sound::playHit()
 {
-	printf("Playing swoosh\n\n\n\n\n");
-	 if ((Mix_PlayChannel( -1, score, -1 )) == -1)
-	 	printf("Not playing swoosh\n\n\n\n\n");
+	 if ((Mix_PlayChannel( -1, hit, 0 )) == -1)
+	 	printf("Not playing hit\n\n\n\n\n");
 
 }
+
+void Sound::playHit2()
+{
+	 if ((Mix_PlayChannel( -1, hit2, 0 )) == -1)
+	 	printf("Not playing hit2\n\n\n\n\n");
+
+}
+
+void Sound::playScore()
+{
+	 if ((Mix_PlayChannel( -1, score, 0 )) == -1)
+	 	printf("Not playing score\n\n\n\n\n");
+
+}
+
+void Sound::playSwoosh()
+{
+	 if ((Mix_PlayChannel( -1, swoosh, 0 )) == -1)
+	 {
+	 	printf("Not playing swoosh\n\n\n\n\n");
+	 }
+
+}
+
 void Sound::clean_up()
 {
 	// //Free the sound effects 
@@ -104,6 +129,7 @@ void Sound::clean_up()
 void Sound::setBackgroundMusic()
 {
 	Mix_PlayMusic( music, -1 );
+	Mix_VolumeMusic(50);
 }
 
 void Sound::toggleBackground()

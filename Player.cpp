@@ -22,12 +22,6 @@ Player::Player(Ogre::SceneManager* scnMgr)
 
 
 	playerNode->scale(2.5f, 2.5f, 2.5f);
-
-	//Set ball properties
-	// ballRadius = 10.0f;
-	// ballDirection = Ogre::Vector3(1.0f, 2.0f, 3.0f);
-	// ballDirection.normalise();
-	// ballSpeed = 250.0f;
 }
 
 Player::~Player(void)

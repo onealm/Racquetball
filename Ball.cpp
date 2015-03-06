@@ -19,13 +19,13 @@ Ball::Ball(Ogre::SceneManager* scnMgr)
 	//Attach ball to node
 	ballNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ball", Ogre::Vector3(0, 500, -500));
 	ballNode->attachObject(ball);
-	ballNode->scale(0.1f,0.1f,0.1f);
+	ballNode->scale(0.2f,0.2f,0.2f);
 
 	//Set ball properties
-	bRadius = 10.0f;
+	bRadius = 20.0f;
     bDirection = Ogre::Vector3(1.0f, 2.0f, 3.0f);
     bDirection.normalise();
-    bSpeed = 250.0f;
+    bSpeed = 600.0f;
 
 }
 

@@ -15,7 +15,7 @@ Paddle::Paddle(Ogre::SceneManager* scnMgr, Ogre::SceneNode* playerNode)
 
     //Create Paddle Entity and attach to player
     Ogre::Entity *rPaddle = scnMgr->createEntity("rPaddle", "pPaddle");
-    Ogre::SceneNode* padNode = playerNode->createChildSceneNode("Paddle", Ogre::Vector3(25, 115, 0));
+    Ogre::SceneNode* padNode = playerNode->createChildSceneNode("Paddle", Ogre::Vector3(25, 115, -25));
     padNode->attachObject(rPaddle);
 
     //Rotate to see
