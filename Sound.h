@@ -17,6 +17,8 @@ protected:
 	bool init(); 
 	bool load_files();
 	void clean_up();
+	void stopSoundEffects();
+	void startSoundEffects();
 
 public:
 	Sound(Ogre::SceneManager* scnMgr);
@@ -27,6 +29,9 @@ public:
 	void playHit2();
 	void playScore();
 	void playSwoosh();
+	void toggleSoundEffects();
+	void lowerMusicVolume();
+	void raiseMusicVolume();
 };
 
 #endif // SOUND_H
