@@ -160,3 +160,43 @@ void Sound::toggleBackground()
         }
 }
 
+void Sound::stopSoundEffects()
+{
+	Mix_Volume(-1, 0);
+}
+
+void Sound::startSoundEffects()
+{
+	Mix_Volume(-1, 64);
+}
+
+void Sound::toggleSoundEffects()
+{
+	if(Mix_Volume(-1, -1) == 0)
+	{
+		startSoundEffects();
+	}
+	else if(Mix_Volume(-1, -1) > 0)
+	{
+		stopSoundEffects();
+	}
+}
+
+void Sound::lowerMusicVolume()
+{
+	int volume = Mix_VolumeMusic(-1);
+	if(volume > 0)
+	{
+		Mix_VolumeMusic(--volume);
+	}	
+}
+
+void Sound::raiseMusicVolume()
+{
+	int volume = Mix_VolumeMusic(-1);
+	if(volume < 128)
+	{
+		Mix_VolumeMusic(++volume);
+	}	
+}
+
