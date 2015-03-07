@@ -93,11 +93,6 @@ namespace gTech
         //mCamera->setAutoTracking(true, mSceneMgr->getSceneNode("Player")); 
         mSceneMgr->getSceneNode("Player")->attachObject(mCamera);
 
-        //mSceneMgr->getSceneNode("Player")->attachObject(mSceneMgr->getSceneNode("Paddle"));
-
-        // playingRoom->addChild(ball->getNode());
-        // playingRoom->addChild(player->getNode());
-
         ball->setPlayingRoom(playingRoom);
         player->setPlayingRoom(playingRoom);
     }
@@ -173,7 +168,8 @@ namespace gTech
         static Ogre::Real mTime = 0;
 
         mTime += evt.timeSinceLastFrame;
-
+        mToggle -= evt.timeSinceLastFrame;
+        
         time++;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
@@ -198,9 +194,24 @@ namespace gTech
             transVector.x += mMove;
             //gameSound->playScore(); //REMOVE
         }
-        if (mKeyboard->isKeyDown(OIS::KC_P)) // Right
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
         {
+            mToggle = 0.5;
             gameSound->toggleBackground();
+        }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+        {  
+            mToggle = 0.5;
+            gameSound->toggleSoundEffects();
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_1))
+        {
+            gameSound->lowerMusicVolume();
+        }
+
+        if(mKeyboard->isKeyDown(OIS::KC_2))
+        {
+            gameSound->raiseMusicVolume();
         }
         //Temporary Score Workaround
         if (time >= 1500)
