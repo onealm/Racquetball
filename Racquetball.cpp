@@ -18,6 +18,8 @@ namespace gTech
     Player *player;
     Paddle *bigPaddle;
     Sound *gameSound;
+    std::deque<Ogre::Vector3> mWalkList;
+    const int gameTime = 10;
 
     //---------------------------------------------------------------------------
     Racquetball::Racquetball(void)
@@ -46,7 +48,6 @@ namespace gTech
         ourWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
 
         ourWorld->setGravity(btVector3(0,-45.80,0));
-        //btAlignedObjectArray<btCollisionShape *> collisionShapes;
     }
 
     //---------------------------------------------------------------------------
@@ -75,7 +76,8 @@ namespace gTech
         //Set Up Room
         playingRoom = new PlayingRoom(mSceneMgr, ourWorld);
         ball = new Ball(mSceneMgr, ourWorld);
-        player = new Player(mSceneMgr);
+        setupLights();
+        player = new Player(mSceneMgr, ourWorld);
 
         //Player Node
         Ogre::SceneNode* playerNode = mSceneMgr->getSceneNode("Player");
@@ -98,6 +100,29 @@ namespace gTech
 
         ball->setPlayingRoom(playingRoom);
         player->setPlayingRoom(playingRoom);
+    }
+
+    void Racquetball::setupLights(void) 
+    { 
+        mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5,0.5,0.5)); 
+        Ogre::Vector3 dir(-1,-1,0.5); dir.normalise(); 
+        Ogre::Light* l = mSceneMgr->createLight("light1"); 
+        l->setType(Ogre::Light::LT_DIRECTIONAL); 
+        l->setDirection(dir);
+
+        Ogre::NameValuePairList pairList; 
+        pairList["numberOfChains"] = "1"; 
+        pairList["maxElements"] = "80"; 
+        Ogre::RibbonTrail* trail = static_cast<Ogre::RibbonTrail*>(mSceneMgr->createMovableObject("1", "RibbonTrail", &pairList)); 
+        trail->setMaterialName("Examples/LightRibbonTrail"); 
+        trail->setTrailLength(400);
+
+        mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(trail);
+
+        trail->setInitialColour(0, 1.0, 0.8, 0); 
+        trail->setColourChange(0, 0.5, 0.5, 0.5, 0.5); 
+        trail->setInitialWidth(0, ball->bRadius); 
+        trail->addNode(mSceneMgr->getSceneNode("Ball")); 
     }
     //---------------------------------------------------------------------------
 
@@ -136,6 +161,7 @@ namespace gTech
         
         //Label for score. Change with setCaption(const Ogre::DisplayString& caption)
         scoreLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "ScoreLabel", "Score: 0", 400);
+        gameOver = mTrayMgr->createLabel(OgreBites::TL_BOTTOM, "GameOver", "Time Left: " + gameTime, 300);
      
     }
 
@@ -144,10 +170,11 @@ namespace gTech
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
         static Ogre::Real mMove = 500;
-        time++;
+        static Ogre::Real mTime = 0;
 
-        ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
-        ball->moveBall();
+        mTime += evt.timeSinceLastFrame;
+
+        time++;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
@@ -191,7 +218,25 @@ namespace gTech
             scoreLabel->setCaption(Ogre::DisplayString(s)); 
         }
 
+        if (mTime >= gameTime)
+        {
+            gameOver->setCaption(Ogre::DisplayString("Game Over!"));
+        }
+        else
+        {
+            Ogre::stringstream go;
+            go << gameTime - (int)(mTime);
+            std::string str2 = go.str();
+
+            std::string s2 = "Time Left: " + str2;
+
+            gameOver->setCaption(Ogre::DisplayString(s2));
+        }
+
         mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+        ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
+        ball->moveBall();
+        player->movePaddle(transVector * evt.timeSinceLastFrame);
 
         return true;
     }

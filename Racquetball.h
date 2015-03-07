@@ -31,10 +31,12 @@ namespace gTech {
 			virtual void createFrameListener(void);
 		    virtual void createScene(void);
 		    virtual void createCamera(void);
+		    virtual void setupLights(void) ;
 		    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		    
 		    //GUI
 		    OgreBites::Label* scoreLabel;
+		    OgreBites::Label* gameOver;
 
 		private:
 			virtual void initPhysics(void);

@@ -10,7 +10,6 @@ Filename:    Ball.h
 #include "BaseApplication.h"
 #include "PlayingRoom.h"
 #include <btBulletDynamicsCommon.h>
-#include <iostream>
 
 class Ball 
 {
@@ -29,7 +28,7 @@ class Ball
 		{
 			btTransform transform;
 			ballBody->getMotionState()->getWorldTransform(transform);
-			//std::cout << transform.getOrigin().getY() << std::endl;
+		
 			btVector3 pos = transform.getOrigin();
 			ballNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
 
