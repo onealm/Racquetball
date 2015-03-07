@@ -1,0 +1,29 @@
+USER MANUAL
+
+Objective: To hit the ball as many times as possible within a set amount of time. (Currently not fully working. Instead, score updates on time to show some sort of score)
+
+Movement:
+	WASD
+
+Camera Controls:
+	
+	The camera can be controlled with the arrow keys.
+
+	Experimental:
+		Hold Shift and use the movement controls to change 
+		the base camera position. 
+		It's best to stay behind the player.
+
+	Turning the mouse turns the camera.
+
+	The camera also follows the player.
+
+Pause Music:
+	Press P to pause music.
+
+Music Volume:
+	Press 1 to lower the music volume.
+	Press 2 to raise the music volume.
+
+Mute Sound Effects:
+	Press M to mute sound effects.
