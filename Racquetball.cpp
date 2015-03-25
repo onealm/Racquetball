@@ -54,6 +54,7 @@ namespace gTech
     void Racquetball::createScene(void)
     {
         initPhysics();
+        setupNetworking();
 
         time = 0;
         score = 0;
@@ -95,6 +96,13 @@ namespace gTech
 
         ball->setPlayingRoom(playingRoom);
         player->setPlayingRoom(playingRoom);
+    }
+
+    //Setup Networking
+    //Not sure if this is the right place to put this
+    void Racquetball::setupNetworking(void)
+    {
+
     }
 
     void Racquetball::setupLights(void) 

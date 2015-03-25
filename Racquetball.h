@@ -17,6 +17,7 @@ Filename:    Racquetball.h
 #include "Player.h"
 #include "Paddle.h"
 #include "Sound.h"
+#include "NetManager.h"
 
 //---------------------------------------------------------------------------
 namespace gTech {
@@ -31,7 +32,8 @@ namespace gTech {
 			virtual void createFrameListener(void);
 		    virtual void createScene(void);
 		    virtual void createCamera(void);
-		    virtual void setupLights(void) ;
+		    virtual void setupLights(void);
+		    virtual void setupNetworking(void);
 		    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		    
 		    //GUI
