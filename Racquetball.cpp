@@ -18,6 +18,7 @@ namespace gTech
     Player *player;
     Paddle *bigPaddle;
     Sound *gameSound;
+    NetManager *mNet;
     std::deque<Ogre::Vector3> mWalkList;
     const int gameTime = 10;
 
@@ -102,6 +103,7 @@ namespace gTech
     //Not sure if this is the right place to put this
     void Racquetball::setupNetworking(void)
     {
+        mNet = new NetManager();
 
     }
 
