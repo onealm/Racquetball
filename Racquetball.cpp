@@ -110,8 +110,9 @@ namespace gTech
     {
         //Eventually have to make only one instance of game be server?
         //Or listen first and if nothing is open, start server?
-
         mNet = new NetManager();
+
+
         if(mNet->initNetManager() == false)
         {
             printf("SDL_net: Unable to initialize.");
@@ -207,47 +208,111 @@ namespace gTech
         
         time++;
 
+        char playerMove = 'W';
+        isServer = true;
+
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
-        if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+        if (isServer)
         {
-            transVector.z -= mMove;
-            gameSound->playSwoosh();
+            if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+            {
+                transVector.z -= mMove;
+                gameSound->playSwoosh();
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+            {
+                transVector.z += mMove;
+                //gameSound->playHit(); //REMOVE
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
+            {
+                transVector.x -= mMove;
+                //gameSound->playHit2(); //REMOVE
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
+            {
+                transVector.x += mMove;
+                //gameSound->playScore(); //REMOVE
+            }
+            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
+            {
+                mToggle = 0.5;
+                gameSound->toggleBackground();
+            }
+            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+            {  
+                mToggle = 0.5;
+                gameSound->toggleSoundEffects();
+            }
+            if(mKeyboard->isKeyDown(OIS::KC_1))
+            {
+                gameSound->lowerMusicVolume();
+            }
+
+            if(mKeyboard->isKeyDown(OIS::KC_2))
+            {
+                gameSound->raiseMusicVolume();
+            }
+            if (playerMove =='W') // Forward
+            {
+                //transVector.z -= mMove;
+            }
+            if (playerMove == 'S') // Backward
+            {
+                //transVector.z += mMove;
+            }
+            if (playerMove == 'A') // Left
+            {
+                //transVector.x -= mMove;
+
+            }
+            if (playerMove == 'D') // Right
+            {
+                //transVector.x += mMove;
+                
+            }
         }
-        if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+        else
         {
-            transVector.z += mMove;
-            //gameSound->playHit(); //REMOVE
-        }
-        if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
-        {
-            transVector.x -= mMove;
-            //gameSound->playHit2(); //REMOVE
-        }
-        if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
-        {
-            transVector.x += mMove;
-            //gameSound->playScore(); //REMOVE
-        }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
-        {
-            mToggle = 0.5;
-            gameSound->toggleBackground();
-        }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-        {  
-            mToggle = 0.5;
-            gameSound->toggleSoundEffects();
-        }
-        if(mKeyboard->isKeyDown(OIS::KC_1))
-        {
-            gameSound->lowerMusicVolume();
+            if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+            {
+                //send host 'W'
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+            {
+                //send host 'S'
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
+            {
+                //send host 'A'
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
+            {
+                //send host 'D'
+            }
+            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
+            {
+                mToggle = 0.5;
+                gameSound->toggleBackground();
+            }
+            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+            {  
+                mToggle = 0.5;
+                gameSound->toggleSoundEffects();
+            }
+            if(mKeyboard->isKeyDown(OIS::KC_1))
+            {
+                gameSound->lowerMusicVolume();
+            }
+
+            if(mKeyboard->isKeyDown(OIS::KC_2))
+            {
+                gameSound->raiseMusicVolume();
+            }
         }
 
-        if(mKeyboard->isKeyDown(OIS::KC_2))
-        {
-            gameSound->raiseMusicVolume();
-        }
+        
 
         //Temporary Score Workaround
         if (time >= 1500)
