@@ -24,6 +24,8 @@ namespace gTech
     bool isClient;
     bool isServer;
     Uint16 port = 77777;
+    // TCPSocket *hostSocket;
+    // TCPSocket *clientSocket;
 
     //---------------------------------------------------------------------------
     Racquetball::Racquetball(void)
@@ -108,6 +110,7 @@ namespace gTech
     {
         //Eventually have to make only one instance of game be server?
         //Or listen first and if nothing is open, start server?
+
         mNet = new NetManager();
         if(mNet->initNetManager() == false)
         {
@@ -123,8 +126,10 @@ namespace gTech
         {
             mNet->addNetworkInfo(PROTOCOL_TCP);
             mNet->setPort(port);
-            mNet->setHost((const char*) 'localhost');
+            //const char* lc = 'localhost';
+            //mNet->setHost((const char*) 'localhost');
             mNet->startClient();
+
         }
 
     }
@@ -245,6 +250,7 @@ namespace gTech
         {
             gameSound->raiseMusicVolume();
         }
+
         //Temporary Score Workaround
         if (time >= 1500)
         {
