@@ -21,6 +21,9 @@ namespace gTech
     NetManager *mNet;
     std::deque<Ogre::Vector3> mWalkList;
     const int gameTime = 10;
+    bool isClient;
+    bool isServer;
+    Uint16 port = 77777;
 
     //---------------------------------------------------------------------------
     Racquetball::Racquetball(void)
@@ -110,8 +113,19 @@ namespace gTech
         {
             printf("SDL_net: Unable to initialize.");
         }
-        mNet->addNetworkInfo(PROTOCOL_TCP);
-        mNet->startServer();
+        if (isServer)
+        {
+            mNet->addNetworkInfo(PROTOCOL_TCP);
+            mNet->setPort(port);
+            mNet->startServer();
+        }
+        else
+        {
+            mNet->addNetworkInfo(PROTOCOL_TCP);
+            mNet->setPort(port);
+            mNet->setHost((const char*) 'localhost');
+            mNet->startClient();
+        }
 
     }
 
