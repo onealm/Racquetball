@@ -126,10 +126,8 @@ namespace gTech
         {
             mNet->addNetworkInfo(PROTOCOL_TCP);
             mNet->setPort(port);
-            //const char* lc = 'localhost';
-            //mNet->setHost((const char*) 'localhost');
+            mNet->setHost("localhost");
             mNet->startClient();
-
         }
 
     }
