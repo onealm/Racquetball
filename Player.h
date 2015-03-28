@@ -30,9 +30,17 @@ class Player
 
 		void movePaddle(Ogre::Vector3 dist)
 		{
-			/*Ogre::Vector3 origin = playerNode->getPosition() + Ogre::Vector3(25, 115, -25) + dist;
-			transform.setOrigin(btVector3(origin.x, origin.y, origin.z));
-			body->getMotionState()->setWorldTransform(transform);*/
+			btTransform transform;
+			body->getMotionState()->getWorldTransform(transform);
+		
+			btVector3 pos = transforma.getOrigin();
+			playerNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
+
+			btQuaternion btq = body->getOrientation();
+			Ogre::Quaternion quat  = Ogre::Quaternion(btq.w(), btq.x(), btq.y(), btq.z());
+			
+			playerNode->setOrientation(quat);
+
 		}
 		
 		Ogre::SceneNode* getNode() { return playerNode; }

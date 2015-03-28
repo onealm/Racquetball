@@ -89,7 +89,7 @@ namespace gTech
         //Player Node
         Ogre::SceneNode* playerNode = mSceneMgr->getSceneNode("Player");
 
-        bigPaddle = new Paddle(mSceneMgr, playerNode);
+        //bigPaddle = new Paddle(mSceneMgr, playerNode);
 
         /*Watch the Player
          *TODO:
@@ -212,12 +212,13 @@ namespace gTech
         isServer = true;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-
+        Ogre::Vector3 velocityVector = Ogre::Vector3::ZERO;
         if (isServer)
         {
             if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
             {
                 transVector.z -= mMove;
+                velocityVector.z -= mMove;
                 gameSound->playSwoosh();
             }
             if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
@@ -346,6 +347,7 @@ namespace gTech
         }
 
         mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+        mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
         ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
