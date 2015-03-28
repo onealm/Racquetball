@@ -23,7 +23,7 @@ namespace gTech
     const int gameTime = 10;
     bool isClient;
     bool isServer;
-    Uint16 port = 77777;
+    // Uint16 port = 77777;
     // TCPSocket *hostSocket;
     // TCPSocket *clientSocket;
 
@@ -119,16 +119,15 @@ namespace gTech
         }
         if (isServer)
         {
-            mNet->addNetworkInfo(PROTOCOL_TCP);
-            mNet->setPort(port);
-            mNet->startServer();
+            mNet->addNetworkInfo(PROTOCOL_ALL); 	 	
+            mNet->startServer(); 	 	
+	        mNet->multiPlayerInit(24); 
         }
         else
         {
-            mNet->addNetworkInfo(PROTOCOL_TCP);
-            mNet->setPort(port);
-            mNet->setHost("localhost");
-            mNet->startClient();
+            mNet->addNetworkInfo(PROTOCOL_ALL);
+            mNet->startServer();
+            //mNet->joinMultiPlayer(something here???);
         }
 
     }
