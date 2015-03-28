@@ -347,7 +347,7 @@ namespace gTech
         }
 
         mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-        mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
+        //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
         ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
