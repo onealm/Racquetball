@@ -1,0 +1,19 @@
+void TutorialApplication::createBulletSim(void) {
+    // btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+    overlappingPairCache = new btDbvtBroadphase();
+
+    // Contains default memory/collision setup.
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    
+    // Default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+    // Default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+    solver = new btSequentialImpulseConstraintSolver;
+
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0,-10,0));
+
+    // debugger = new CDebugDraw(mSceneMgr ,dynamicsWorld);
+
+}
