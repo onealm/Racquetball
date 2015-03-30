@@ -101,8 +101,8 @@ void PlayingRoom::addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld
     shape->calculateLocalInertia(mass, localInertia);
     btDefaultMotionState *motionState = new btDefaultMotionState(transform);
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
-    rbInfo.m_restitution = 1;
-    rbInfo.m_friction = 0;
+    rbInfo.m_restitution = 0.5f;
+    rbInfo.m_friction = 0.0005f;
     btRigidBody *body = new btRigidBody(rbInfo);
     body->setUserPointer((void *)(newBtNode));
     ourWorld->addRigidBody(body);

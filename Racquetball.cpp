@@ -16,7 +16,6 @@ namespace gTech
     PlayingRoom *playingRoom;
     Ball *ball;
     Player *player;
-    Paddle *bigPaddle;
     Sound *gameSound;
     NetManager *mNet;
     std::deque<Ogre::Vector3> mWalkList;
@@ -208,17 +207,14 @@ namespace gTech
         
         time++;
 
-        char playerMove = 'W';
         isServer = true;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-        Ogre::Vector3 velocityVector = Ogre::Vector3::ZERO;
         if (isServer)
         {
             if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
             {
                 transVector.z -= mMove;
-                velocityVector.z -= mMove;
                 gameSound->playSwoosh();
             }
             if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
@@ -254,24 +250,6 @@ namespace gTech
             if(mKeyboard->isKeyDown(OIS::KC_2))
             {
                 gameSound->raiseMusicVolume();
-            }
-            if (playerMove =='W') // Forward
-            {
-                //transVector.z -= mMove;
-            }
-            if (playerMove == 'S') // Backward
-            {
-                //transVector.z += mMove;
-            }
-            if (playerMove == 'A') // Left
-            {
-                //transVector.x -= mMove;
-
-            }
-            if (playerMove == 'D') // Right
-            {
-                //transVector.x += mMove;
-                
             }
         }
         else
@@ -346,8 +324,8 @@ namespace gTech
             gameOver->setCaption(Ogre::DisplayString(s2));
         }
 
-        mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-        mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
+        //mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+        //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
         ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
