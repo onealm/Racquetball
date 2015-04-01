@@ -119,13 +119,13 @@ namespace gTech
         if (isServer)
         {
             mNet->addNetworkInfo(PROTOCOL_TCP);
-            mNet->setPort(port);
+            //mNet->setPort(port);
             mNet->startServer();
         }
         else
         {
             mNet->addNetworkInfo(PROTOCOL_TCP);
-            mNet->setPort(port);
+            //mNet->setPort(port);
             mNet->setHost("localhost");
             mNet->startClient();
         }
