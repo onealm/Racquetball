@@ -15,7 +15,6 @@ Filename:    Racquetball.h
 #include <string>
 #include "Ball.h"
 #include "Player.h"
-#include "Paddle.h"
 #include "Sound.h"
 #include "NetManager.h"
 

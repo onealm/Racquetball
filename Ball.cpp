@@ -17,7 +17,7 @@ Ball::Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld)
 	ball->setCastShadows(true);
 
 	//Attach ball to node
-	ballNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ball", Ogre::Vector3(0, 700, -500));
+	ballNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ball", Ogre::Vector3(0, 900, -500));
 	ballNode->attachObject(ball);
 	ballNode->scale(0.2f,0.2f,0.2f);
 
@@ -46,10 +46,10 @@ void Ball::addToWorld(Ogre::SceneNode *newBtBode, btDiscreteDynamicsWorld *ourWo
 	shape->calculateLocalInertia(mass, localInertia);
 	btDefaultMotionState *motionState = new btDefaultMotionState(transform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
-	rbInfo.m_restitution = 1;
-	rbInfo.m_friction = 0;
+	rbInfo.m_restitution = 0.9f;
+	rbInfo.m_friction = 0.005f;
 	ballBody = new btRigidBody(rbInfo);
-	ballBody->setLinearVelocity(btVector3(0, 0, 1400));
 	ballBody->setUserPointer((void *)(newBtBode));
 	ourWorld->addRigidBody(ballBody);
+	ballBody->setLinearVelocity(btVector3(0, 0, 1400));
 }
