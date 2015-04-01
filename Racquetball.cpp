@@ -107,29 +107,7 @@ namespace gTech
     //Not sure if this is the right place to put this
     void Racquetball::setupNetworking(void)
     {
-        //Eventually have to make only one instance of game be server?
-        //Or listen first and if nothing is open, start server?
-        mNet = new NetManager();
-
-
-        if(mNet->initNetManager() == false)
-        {
-            printf("SDL_net: Unable to initialize.");
-        }
-        if (isServer)
-        {
-            mNet->addNetworkInfo(PROTOCOL_TCP);
-            //mNet->setPort(port);
-            mNet->startServer();
-        }
-        else
-        {
-            mNet->addNetworkInfo(PROTOCOL_TCP);
-            //mNet->setPort(port);
-            mNet->setHost("localhost");
-            mNet->startClient();
-        }
-
+        NetManager *mNet = new NetManager();
     }
 
     void Racquetball::setupLights(void) 
