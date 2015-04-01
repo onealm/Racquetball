@@ -30,12 +30,12 @@ NetManager::NetManager()
   if(isServer)
   {
     setupServer();
-    receiveMessages();
+    //receiveMessages();
   }
   else
   {
     setupClient();
-    sendMessages();
+    //sendMessages();
   }
 
 
