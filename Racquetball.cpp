@@ -15,6 +15,8 @@ namespace gTech
     btDiscreteDynamicsWorld *ourWorld;
     PlayingRoom *playingRoom;
     Ball *ball;
+    Ogre::SceneNode* bNode;
+    Ogre::SceneNode* pNode;
     Player *player;
     Sound *gameSound;
     NetManager *mNet;
@@ -22,6 +24,7 @@ namespace gTech
     const int gameTime = 10;
     bool isClient;
     bool isServer;
+    float buffer[7];
     // Uint16 port = 77777;
     // TCPSocket *hostSocket;
     // TCPSocket *clientSocket;
@@ -88,6 +91,7 @@ namespace gTech
         //Player Node
         Ogre::SceneNode* playerNode = mSceneMgr->getSceneNode("Player");
 
+
         //bigPaddle = new Paddle(mSceneMgr, playerNode);
 
         /*Watch the Player
@@ -101,13 +105,31 @@ namespace gTech
 
         ball->setPlayingRoom(playingRoom);
         player->setPlayingRoom(playingRoom);
+        pNode = mSceneMgr->getSceneNode("Player");
+        bNode = mSceneMgr->getSceneNode("Ball");
     }
 
     //Setup Networking
     //Not sure if this is the right place to put this
     void Racquetball::setupNetworking(void)
     {
-        NetManager *mNet = new NetManager();
+        mNet = new NetManager();
+    }
+    void Racquetball::prepMessage(void)
+    {
+        Ogre::Vector3 bPos = bNode->getPosition();
+        Ogre::Vector3 pPos = pNode->getPosition();
+
+        buffer[0] = bPos.x;
+        buffer[1] = bPos.y;
+        buffer[2] = bPos.z;
+        buffer[3] = pPos.x;
+        buffer[4] = pPos.y;
+        buffer[5] = pPos.z;
+        buffer[6] = (float) score;
+
+        //mNet->sendMessage(buffer);
+
     }
 
     void Racquetball::setupLights(void) 

@@ -12,7 +12,7 @@ class NetManager
     virtual ~NetManager(void);
 
     void receiveMessages(void);
-    void sendMessages(void);
+    void sendMessages(float *buffer);
 
   protected:
     void setupServer(void);

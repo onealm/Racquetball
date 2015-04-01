@@ -1,6 +1,10 @@
 
 
 #include "NetManager.h"
+#include "BaseApplication.h"
+#include "PlayingRoom.h"
+#include "Player.h"
+#include "Ball.h"
 
 
 
@@ -15,7 +19,7 @@
 TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
 IPaddress ip, *remoteIP;
 int quit, quit2, len;
-char buffer[512];
+float buffer[512];
 
 NetManager::NetManager()
 {
@@ -95,19 +99,19 @@ void NetManager::receiveMessages()
       {
         if (SDLNet_TCP_Recv(csd, buffer, 512) > 0)
         {
-          printf("Client say: %s\n", buffer);
+          // printf("Client say: %s\n", buffer);
  
-          if(strcmp(buffer, "exit") == 0) /* Terminate this connection */
-          {
-            quit2 = 1;
-            printf("Terminate connection\n");
-          }
-          if(strcmp(buffer, "quit") == 0) /* Quit the program */
-          {
-            quit2 = 1;
-            quit = 1;
-            printf("Quit program\n");
-          }
+          // if(strcmp(buffer, "exit") == 0) /* Terminate this connection */
+          // {
+          //   quit2 = 1;
+          //   printf("Terminate connection\n");
+          // }
+          // if(strcmp(buffer, "quit") == 0) /* Quit the program */
+          // {
+          //   quit2 = 1;
+          //   quit = 1;
+          //   printf("Quit program\n");
+          // }
         }
       }
  
@@ -134,24 +138,24 @@ void NetManager::setupClient()
   }
 }
 
-void NetManager::sendMessages()
+void NetManager::sendMessages(float *buffer)
 {
   /* Send messages */
   quit = 0;
-  strcpy(buffer, "quit");
+
   while (!quit)
   {
-    len = strlen(buffer) + 1;
+    len = sizeof(buffer) + 1;
     if (SDLNet_TCP_Send(sd, (void *)buffer, len) < len)
     {
       fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError());
       exit(EXIT_FAILURE);
     }
  
-    if(strcmp(buffer, "exit") == 0)
-      quit = 1;
-    if(strcmp(buffer, "quit") == 0)
-      quit = 1;
+    // if(strcmp(buffer, "exit") == 0)
+    //   quit = 1;
+    // if(strcmp(buffer, "quit") == 0)
+    //   quit = 1;
   }
 }
 
