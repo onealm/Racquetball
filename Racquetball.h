@@ -36,10 +36,14 @@ namespace gTech {
 		    virtual void setupLights(void);
 		    virtual void setupNetworking(void);
 		    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+		    virtual void prepMessage(void);
 		    
 		    //GUI
 		    OgreBites::Label* scoreLabel;
 		    OgreBites::Label* gameOver;
+
+		    //Netmanager
+		    NetManager *mNet;
 
 		private:
 			virtual void initPhysics(void);
