@@ -51,5 +51,5 @@ void Ball::addToWorld(Ogre::SceneNode *newBtBode, btDiscreteDynamicsWorld *ourWo
 	ballBody = new btRigidBody(rbInfo);
 	ballBody->setUserPointer((void *)(newBtBode));
 	ourWorld->addRigidBody(ballBody);
-	ballBody->setLinearVelocity(btVector3(0, 0, 1400));
+	ballBody->setLinearVelocity(btVector3(500, 300, 1400));
 }

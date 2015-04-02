@@ -15,7 +15,7 @@ class Ball
 {
 	protected:
 		PlayingRoom* playingRoom;
-		Ogre::SceneNode* ballNode;
+		
 		btRigidBody *ballBody;
 
 	public:
@@ -23,7 +23,7 @@ class Ball
 		~Ball();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
-
+Ogre::SceneNode* ballNode;
 		void moveBall(void)
 		{
 			btTransform transform;

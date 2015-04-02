@@ -17,8 +17,17 @@ class PlayingRoom
 	public:
 		PlayingRoom(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld);
 		~PlayingRoom();
-
+		btRigidBody *body;
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld, Ogre::Vector3 norm);
+Ogre::SceneNode *floorNode;
+Ogre::SceneNode *ceilingNode;
+Ogre::SceneNode *wall1Node;
+Ogre::SceneNode *wall2Node;
+Ogre::SceneNode *wall3Node;
+Ogre::SceneNode *wall4Node;
+		void moveRoom()
+		{		
+		}
 
 		float uHeight;
 		float uLength;

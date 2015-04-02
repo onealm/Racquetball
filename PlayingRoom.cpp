@@ -39,27 +39,27 @@ PlayingRoom::PlayingRoom(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ou
 
     //Create Plane Entities and Set Them
     Ogre::Entity *rFloor = scnMgr->createEntity("rFloor", "pFloor");
-    Ogre::SceneNode *floorNode = scnMgr->getRootSceneNode()->createChildSceneNode("Floor", Ogre::Vector3(0, 0, -rLength/8));
+    floorNode = scnMgr->getRootSceneNode()->createChildSceneNode("Floor", Ogre::Vector3(0, 0, -rLength/8));
     floorNode->attachObject(rFloor);
 
     Ogre::Entity *rCeiling = scnMgr->createEntity("rCeiling", "pCeiling");
-    Ogre::SceneNode *ceilingNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ceiling", Ogre::Vector3(0, rHeight, -rLength/8));
+    ceilingNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ceiling", Ogre::Vector3(0, rHeight, -rLength/8));
     ceilingNode->attachObject(rCeiling);
 
     Ogre::Entity *rWall1 = scnMgr->createEntity("rWall1", "pWall1");
-    Ogre::SceneNode *wall1Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall1", Ogre::Vector3(rWidth/2, rHeight/2, -rLength/8));
+    wall1Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall1", Ogre::Vector3(rWidth/2, rHeight/2, -rLength/8));
     wall1Node->attachObject(rWall1);
 
     Ogre::Entity *rWall2 = scnMgr->createEntity("rWall2", "pWall2");
-    Ogre::SceneNode *wall2Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall2", Ogre::Vector3(-rWidth/2, rHeight/2, -rLength/8));
+    wall2Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall2", Ogre::Vector3(-rWidth/2, rHeight/2, -rLength/8));
     wall2Node->attachObject(rWall2);
 
     Ogre::Entity *rWall3 = scnMgr->createEntity("rWall3", "pWall3");
-    Ogre::SceneNode *wall3Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall3", Ogre::Vector3(0, rHeight/2, rLength/2-rLength/8));
+    wall3Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall3", Ogre::Vector3(0, rHeight/2, rLength/2-rLength/8));
     wall3Node->attachObject(rWall3);
 
     Ogre::Entity *rWall4 = scnMgr->createEntity("rWall4", "pWall4");
-    Ogre::SceneNode *wall4Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall4", Ogre::Vector3(0, rHeight/2, -rLength/2-rLength/8));
+    wall4Node = scnMgr->getRootSceneNode()->createChildSceneNode("Wall4", Ogre::Vector3(0, rHeight/2, -rLength/2-rLength/8));
     wall4Node->attachObject(rWall4);
 
     //Set Textures
@@ -91,7 +91,7 @@ PlayingRoom::~PlayingRoom(void)
 void PlayingRoom::addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld, Ogre::Vector3 norm)
 {
     Ogre::Vector3 pos = newBtNode->getPosition();
-    btScalar mass(0.0f);
+    btScalar mass(100.0f);
     btVector3 localInertia(0, 0, 0);
 
     btCollisionShape *shape = new btStaticPlaneShape(btVector3(norm.x, norm.y, norm.z), 0);
@@ -101,9 +101,9 @@ void PlayingRoom::addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld
     shape->calculateLocalInertia(mass, localInertia);
     btDefaultMotionState *motionState = new btDefaultMotionState(transform);
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
-    rbInfo.m_restitution = 0.5f;
+    rbInfo.m_restitution = 0.9f;
     rbInfo.m_friction = 0.0005f;
-    btRigidBody *body = new btRigidBody(rbInfo);
+    body = new btRigidBody(rbInfo);
     body->setUserPointer((void *)(newBtNode));
     ourWorld->addRigidBody(body);
 }

@@ -15,10 +15,12 @@ Filename:    Player.h
 
 namespace gTech {
 
+//btVector3 size = btVector3(2000,2000,4000);
+
 class Player
 {
 	protected:
-		Ogre::SceneNode* playerNode;
+		
 		PlayingRoom* playingRoom;
 		btTransform transform;
 		btRigidBody *body;
@@ -27,13 +29,18 @@ class Player
 		~Player();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
-
+Ogre::SceneNode* playerNode;
 		void movePaddle(Ogre::Vector3 translation)
 		{			
-			transform.getOrigin() += btVector3(translation.x, translation.y, translation.z);
-			btVector3 pos = transform.getOrigin();
-			playerNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
-
+			//(225, 75, 22.5)
+			//
+			btVector3 pos = transform.getOrigin() + btVector3(translation.x, translation.y, translation.z);
+			if((float)pos[0] > -775.5 && (float)pos[0] < 775.5 &&
+				(float)pos[1] > 75 && (float)pos[1] < 1925 &&
+					(float)pos[2] > -2500 && (float)pos[2] < 1485) {
+						transform.getOrigin() += btVector3(translation.x, translation.y, translation.z);
+						playerNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
+			}
 			body->setWorldTransform(transform);
 		}
 		

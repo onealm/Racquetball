@@ -201,10 +201,11 @@ namespace gTech
         static Ogre::Real mRotate = 0.13;   // The rotate constant
         static Ogre::Real mMove = 500;
         static Ogre::Real mTime = 0;
+        static Ogre::Real mCollision = 0.0;
 
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
-        
+        mCollision -= evt.timeSinceLastFrame;
         time++;
 
         isServer = true;
@@ -232,6 +233,16 @@ namespace gTech
                 transVector.x += mMove;
                 //gameSound->playScore(); //REMOVE
             }
+            if (mKeyboard->isKeyDown(OIS::KC_Z)) // Down
+            {
+                transVector.y -= mMove;
+                //gameSound->playScore(); //REMOVE
+            }
+            if (mKeyboard->isKeyDown(OIS::KC_SPACE)) // Up
+            {
+                transVector.y += mMove;
+            }
+
             if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
             {
                 mToggle = 0.5;
@@ -290,36 +301,17 @@ namespace gTech
                 gameSound->raiseMusicVolume();
             }
         }
-
-        
-
-        //Temporary Score Workaround
-        if (time >= 1500)
-        {
-            time = 0;
-            score++;
-            gameSound->playScore();
-
-            Ogre::stringstream ss;
-            ss << score;
-            std::string str = ss.str();
-
-            std::string s = "Score: " + str;
-
-            scoreLabel->setCaption(Ogre::DisplayString(s)); 
-        }
-
-        if (mTime >= gameTime)
+        if (score >= 10)
         {
             gameOver->setCaption(Ogre::DisplayString("Game Over!"));
         }
         else
         {
             Ogre::stringstream go;
-            go << gameTime - (int)(mTime);
+            go << (int)(mTime);
             std::string str2 = go.str();
 
-            std::string s2 = "Time Left: " + str2;
+            std::string s2 = "Time: " + str2;
 
             gameOver->setCaption(Ogre::DisplayString(s2));
         }
@@ -328,7 +320,40 @@ namespace gTech
         //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
         ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         ball->moveBall();
+        playingRoom->moveRoom();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
+
+        int numManifolds = ourWorld->getDispatcher()->getNumManifolds();
+        for(int i = 0; i < numManifolds; i++) {
+
+            btPersistentManifold* contactManifold =  ourWorld->getDispatcher()->getManifoldByIndexInternal(i);
+            btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
+            btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
+            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) {
+                std::cout << "Success";
+            
+                int numContacts = contactManifold->getNumContacts();
+                for (int j=0;j<1;j++)
+                {
+                    btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                    if (pt.getDistance()<0.0000f && mCollision < 0.0f)
+                    {
+                        const btVector3& ptA = pt.getPositionWorldOnA();
+                        const btVector3& ptB = pt.getPositionWorldOnB();
+                        const btVector3& normalOnB = pt.m_normalWorldOnB;
+                        score++;
+                        mCollision = 0.5f;
+                        Ogre::stringstream ss;
+                        ss << score;
+                        std::string str = ss.str();
+
+                        std::string s = "Score: " + str;
+                        scoreLabel->setCaption(Ogre::DisplayString(s)); 
+                        gameSound->playScore();
+                    }
+                }
+            }
+        }
 
         return true;
     }
