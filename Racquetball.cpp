@@ -22,6 +22,8 @@ namespace gTech
     const int gameTime = 10;
     bool isClient;
     bool isServer;
+    bool hitPaddle;
+
     uint32_t buffer[7];
     // Uint16 port = 77777;
     // TCPSocket *hostSocket;
@@ -202,14 +204,20 @@ namespace gTech
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
+<<<<<<< HEAD
         static Ogre::Real mMove = 1250;
+=======
+        static Ogre::Real mMove = 1000;
+>>>>>>> 04786bd3c787ab7ba256b62ba864b0c686a1d45a
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
-
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
+<<<<<<< HEAD
         
+=======
+>>>>>>> 04786bd3c787ab7ba256b62ba864b0c686a1d45a
         time++;
         isServer = true;
 
@@ -308,28 +316,44 @@ namespace gTech
             btPersistentManifold* contactManifold =  ourWorld->getDispatcher()->getManifoldByIndexInternal(i);
             btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
             btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
+
+            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == player->playerNode)) {
+                int numContacts = contactManifold->getNumContacts();
+                for (int j=0;j<numContacts;j ++)
+                {
+
+                    btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                    if (pt.getDistance()<0.0000f)
+                    {
+                        printf("Ball and player");
+                        hitPaddle = true;
+                    }
+                }
+            }
+
             if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) 
             {
-                //std::cout << "Success";
-            
                 int numContacts = contactManifold->getNumContacts();
+                
                 for (int j=0;j<1;j++)
                 {
+                                           
                     btManifoldPoint& pt = contactManifold->getContactPoint(j);
-                    if (pt.getDistance()<0.0000f && mCollision < 0.0f)
+                    if (pt.getDistance()<0.0000f && mCollision <= 0.0f)
                     {
-                        const btVector3& ptA = pt.getPositionWorldOnA();
-                        const btVector3& ptB = pt.getPositionWorldOnB();
-                        const btVector3& normalOnB = pt.m_normalWorldOnB;
-                        score++;
+                        printf("Ball and wall \n\n");
+                        //std::cout << hitPaddle;
                         mCollision = 0.5f;
+                        if(hitPaddle) {
+                            score++;
+                            gameSound->playScore();
+                            hitPaddle = false;
+                        }
                         Ogre::stringstream ss;
                         ss << score;
                         std::string str = ss.str();
-
                         std::string s = "Score: " + str;
                         scoreLabel->setCaption(Ogre::DisplayString(s)); 
-                        gameSound->playScore();
                     }
                 }
             }
