@@ -103,7 +103,6 @@ void Sound::playSwoosh()
 {
 	 if ((Mix_PlayChannel( -1, swoosh, 0 )) == -1)
 	 {
-	 	printf("Not playing swoosh\n\n\n\n\n");
 	 }
 
 }
