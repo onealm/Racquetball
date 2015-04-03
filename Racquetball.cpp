@@ -210,7 +210,7 @@ namespace gTech
         mToggle -= evt.timeSinceLastFrame;
         
         time++;
-        isServer = false;
+        isServer = true;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
         
