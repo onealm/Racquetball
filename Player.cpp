@@ -33,7 +33,7 @@ namespace gTech {
 	void Player::addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld)
 	{
 		Ogre::Vector3 pos = newBtNode->getPosition();
-	    btScalar mass(5.0f);
+	    btScalar mass(0.0f);
 	    btVector3 localInertia(0, 0, 0);
 
 	    btCollisionShape *shape = new btBoxShape(btVector3(225, 75, 12.5));
@@ -42,7 +42,7 @@ namespace gTech {
 	    shape->calculateLocalInertia(mass, localInertia);
 	    btDefaultMotionState *motionState = new btDefaultMotionState(transform);
 	    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
-	    rbInfo.m_restitution = 0.9f;
+	    rbInfo.m_restitution = 1.0f;
 	    rbInfo.m_friction = 0;
 	    body = new btRigidBody(rbInfo);
 	    body->setUserPointer((void *)(newBtNode));

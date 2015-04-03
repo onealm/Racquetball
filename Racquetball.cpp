@@ -9,7 +9,6 @@ Filename:    Racquetball.cpp
 
 namespace gTech 
 {
-
     int time;
     int score;
     btDiscreteDynamicsWorld *ourWorld;
@@ -20,7 +19,6 @@ namespace gTech
     Player *player;
     Sound *gameSound;
     NetManager *mNet;
-    std::deque<Ogre::Vector3> mWalkList;
     const int gameTime = 10;
     bool isClient;
     bool isServer;
@@ -115,6 +113,7 @@ namespace gTech
     {
         mNet = new NetManager();
     }
+
     struct GameUpdate {
         float ball_x;
         float ball_y;
@@ -124,6 +123,7 @@ namespace gTech
         float paddle_z;
         int score;
     };
+
     void Racquetball::prepMessage(void)
     {
         Ogre::Vector3 bPos = bNode->getPosition();
@@ -166,10 +166,10 @@ namespace gTech
         mCamera = mSceneMgr->createCamera("PlayerCam");
 
         //Set Camera Position 
-        mCamera->setPosition(Ogre::Vector3(0, 400, 1750));
+        mCamera->setPosition(Ogre::Vector3(0, 600, 1750));
 
         //Set Camera Direction
-        mCamera->lookAt(Ogre::Vector3(0, 750, -1000));
+        mCamera->lookAt(Ogre::Vector3(0, 0, -1000));
 
         //Set Near Clip Distance
         mCamera->setNearClipDistance(5);
@@ -202,12 +202,13 @@ namespace gTech
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
-        static Ogre::Real mMove = 500;
+        static Ogre::Real mMove = 1250;
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
 
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
+        mCollision -= evt.timeSinceLastFrame;
         
         time++;
         isServer = true;
@@ -237,6 +238,14 @@ namespace gTech
         {
             transVector.x += mMove;
             //gameSound->playScore(); //REMOVE
+        }
+        if(mMouse->getMouseState().buttonDown(OIS::MB_Left))
+        {
+            transVector.y += mMove;
+        }
+        if(mMouse->getMouseState().buttonDown(OIS::MB_Right))
+        {
+            transVector.y -= mMove;
         }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
         {
@@ -276,8 +285,8 @@ namespace gTech
         //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
         ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         ball->moveBall();
-        playingRoom->moveRoom();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
+
         if (time >= 1500)
         {
             time = 0;
@@ -291,6 +300,7 @@ namespace gTech
                 mNet->sendMessages(buffer);
             }
         }
+
         int numManifolds = ourWorld->getDispatcher()->getNumManifolds();
         for(int i = 0; i < numManifolds; i++) 
         {
