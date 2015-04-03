@@ -24,7 +24,7 @@ namespace gTech
     const int gameTime = 10;
     bool isClient;
     bool isServer;
-    float buffer[7];
+    uint32_t buffer[7];
     // Uint16 port = 77777;
     // TCPSocket *hostSocket;
     // TCPSocket *clientSocket;
@@ -62,7 +62,6 @@ namespace gTech
     void Racquetball::createScene(void)
     {
         initPhysics();
-        setupNetworking();
 
         time = 0;
         score = 0;
@@ -107,6 +106,7 @@ namespace gTech
         player->setPlayingRoom(playingRoom);
         pNode = mSceneMgr->getSceneNode("Player");
         bNode = mSceneMgr->getSceneNode("Ball");
+        setupNetworking();
     }
 
     //Setup Networking
@@ -115,21 +115,24 @@ namespace gTech
     {
         mNet = new NetManager();
     }
+    struct GameUpdate {
+        float ball_x;
+        float ball_y;
+        float ball_z;
+        float paddle_x;
+        float paddle_y;
+        float paddle_z;
+        int score;
+    };
     void Racquetball::prepMessage(void)
     {
         Ogre::Vector3 bPos = bNode->getPosition();
         Ogre::Vector3 pPos = pNode->getPosition();
-
-        buffer[0] = bPos.x;
-        buffer[1] = bPos.y;
-        buffer[2] = bPos.z;
-        buffer[3] = pPos.x;
-        buffer[4] = pPos.y;
-        buffer[5] = pPos.z;
-        buffer[6] = (float) score;
+        GameUpdate update = {bPos.x, bPos.y, bPos.z, pPos.x, pPos.y, pPos.z, score};
+        GameUpdate* dest = reinterpret_cast<GameUpdate*>(&buffer[0]);
+        *dest = update;
 
         //mNet->sendMessage(buffer);
-
     }
 
     void Racquetball::setupLights(void) 
@@ -205,101 +208,54 @@ namespace gTech
 
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
-        mCollision -= evt.timeSinceLastFrame;
+        
         time++;
-
-        isServer = true;
+        isServer = false;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-        if (isServer)
+        
+        // if (mKeyboard->isKeyDown(OIS::KC_H)) // Forward
+        // {
+        //     isServer = false;
+        // }
+        if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
         {
-            if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
-            {
-                transVector.z -= mMove;
-                gameSound->playSwoosh();
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
-            {
-                transVector.z += mMove;
-                //gameSound->playHit(); //REMOVE
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
-            {
-                transVector.x -= mMove;
-                //gameSound->playHit2(); //REMOVE
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
-            {
-                transVector.x += mMove;
-                //gameSound->playScore(); //REMOVE
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_Z)) // Down
-            {
-                transVector.y -= mMove;
-                //gameSound->playScore(); //REMOVE
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_SPACE)) // Up
-            {
-                transVector.y += mMove;
-            }
-
-            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
-            {
-                mToggle = 0.5;
-                gameSound->toggleBackground();
-            }
-            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-            {  
-                mToggle = 0.5;
-                gameSound->toggleSoundEffects();
-            }
-            if(mKeyboard->isKeyDown(OIS::KC_1))
-            {
-                gameSound->lowerMusicVolume();
-            }
-
-            if(mKeyboard->isKeyDown(OIS::KC_2))
-            {
-                gameSound->raiseMusicVolume();
-            }
+            transVector.z -= mMove;
+            gameSound->playSwoosh();
         }
-        else
+        if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
         {
-            if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
-            {
-                //send host 'W'
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
-            {
-                //send host 'S'
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
-            {
-                //send host 'A'
-            }
-            if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
-            {
-                //send host 'D'
-            }
-            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
-            {
-                mToggle = 0.5;
-                gameSound->toggleBackground();
-            }
-            if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-            {  
-                mToggle = 0.5;
-                gameSound->toggleSoundEffects();
-            }
-            if(mKeyboard->isKeyDown(OIS::KC_1))
-            {
-                gameSound->lowerMusicVolume();
-            }
+            transVector.z += mMove;
+            //gameSound->playHit(); //REMOVE
+        }
+        if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
+        {
+            transVector.x -= mMove;
+            //gameSound->playHit2(); //REMOVE
+        }
+        if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
+        {
+            transVector.x += mMove;
+            //gameSound->playScore(); //REMOVE
+        }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
+        {
+            mToggle = 0.5;
+            gameSound->toggleBackground();
+        }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+        {  
+            mToggle = 0.5;
+            gameSound->toggleSoundEffects();
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_1))
+        {
+            gameSound->lowerMusicVolume();
+        }
 
-            if(mKeyboard->isKeyDown(OIS::KC_2))
-            {
-                gameSound->raiseMusicVolume();
-            }
+        if(mKeyboard->isKeyDown(OIS::KC_2))
+        {
+            gameSound->raiseMusicVolume();
         }
         if (score >= 10)
         {
@@ -322,15 +278,29 @@ namespace gTech
         ball->moveBall();
         playingRoom->moveRoom();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
-
+        if (time >= 1500)
+        {
+            time = 0;
+            if (isServer)
+            {
+                mNet->receiveMessages();
+            } 
+            else
+            {
+                prepMessage();
+                mNet->sendMessages(buffer);
+            }
+        }
         int numManifolds = ourWorld->getDispatcher()->getNumManifolds();
-        for(int i = 0; i < numManifolds; i++) {
+        for(int i = 0; i < numManifolds; i++) 
+        {
 
             btPersistentManifold* contactManifold =  ourWorld->getDispatcher()->getManifoldByIndexInternal(i);
             btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
             btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
-            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) {
-                std::cout << "Success";
+            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) 
+            {
+                //std::cout << "Success";
             
                 int numContacts = contactManifold->getNumContacts();
                 for (int j=0;j<1;j++)
