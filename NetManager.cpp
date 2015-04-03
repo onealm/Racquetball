@@ -26,7 +26,8 @@ bool isOpen;
 
 NetManager::NetManager()
 {
-  bool isServer = false;
+  bool isServer = true;
+  ;
   isOpen = false;
 
   if (SDLNet_Init() < 0)
