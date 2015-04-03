@@ -199,7 +199,7 @@ namespace gTech
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
-        static Ogre::Real mMove = 500;
+        static Ogre::Real mMove = 1000;
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
 
