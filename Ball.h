@@ -23,12 +23,17 @@ class Ball
 		~Ball();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
-Ogre::SceneNode* ballNode;
+		
+		Ogre::SceneNode* ballNode;
+		
 		void moveBall(void)
 		{
 			btTransform transform;
 			ballBody->getMotionState()->getWorldTransform(transform);
-		
+
+			btVector3 velocity = ballBody->getLinearVelocity();
+			ballBody->setLinearVelocity(1.000001*velocity);
+
 			btVector3 pos = transform.getOrigin();
 			ballNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
 
@@ -39,7 +44,7 @@ Ogre::SceneNode* ballNode;
 		}
 
 		Ogre::Real bRadius;
-		Ogre::SceneNode* getNode() { return ballNode; }
+		btRigidBody* getBody() { return ballBody; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 
 };

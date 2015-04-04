@@ -29,7 +29,9 @@ class Player
 		~Player();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
-Ogre::SceneNode* playerNode;
+
+		Ogre::SceneNode* playerNode;
+
 		void movePaddle(Ogre::Vector3 translation)
 		{			
 			//(225, 75, 22.5)
@@ -37,7 +39,7 @@ Ogre::SceneNode* playerNode;
 			btVector3 pos = transform.getOrigin() + btVector3(translation.x, translation.y, translation.z);
 			if((float)pos[0] > -775.5 && (float)pos[0] < 775.5 &&
 				(float)pos[1] > 75 && (float)pos[1] < 1925 &&
-					(float)pos[2] > -2500 && (float)pos[2] < 1485) {
+					(float)pos[2] > -750 && (float)pos[2] < 1485) {
 						transform.getOrigin() += btVector3(translation.x, translation.y, translation.z);
 						playerNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
 			}
