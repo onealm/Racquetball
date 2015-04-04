@@ -25,6 +25,22 @@ namespace gTech {
 
 		addToWorld(playerNode, ourWorld);
 	}
+	Player::Player(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld, bool play2) 
+	{
+		//Create ball
+		Ogre::Entity* player2 = scnMgr->createEntity("cube.mesh");
+
+		//player->setCastShadows(true);
+		player2->setMaterialName("Examples/Rocky");
+		//Attach ball to node
+		playerNode2 = scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 800, 0));
+		playerNode2->attachObject(player2);
+
+
+		playerNode2->scale(4.5f, 1.5f, 0.25f);
+
+		addToWorld(playerNode2, ourWorld);
+	}
 
 	Player::~Player(void)
 	{

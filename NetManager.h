@@ -16,6 +16,7 @@ class NetManager
     void setupClient(void);
 
     bool isConnected(void);
+    uint32_t* getBuffer(void);
 
     //Receive
     void receiveClientMessages(void);

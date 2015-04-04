@@ -22,6 +22,7 @@ namespace gTech
     Ogre::SceneNode* bNode;
     Ogre::SceneNode* pNode;
     Player *player;
+    Player *player2;
     Sound *gameSound;
     std::deque<Ogre::Vector3> mWalkList;
 
@@ -34,6 +35,7 @@ namespace gTech
     NetManager *mNet;
     bool isClient = false;
     bool isServer = false;
+    bool multiPlayerSetup = false;
     uint32_t buffer[8];
     int serverScore;
     int clientScore;
@@ -126,13 +128,13 @@ namespace gTech
         if(isServer)
         {
             mNet->setupServer();
-            printf("*****I'm a Server! (and a client)\n");
+            // printf("*****I'm a Server! (and a client)\n");
         }
 
         if(isClient)
         {
             mNet->setupClient();
-            printf("*****I'm a Client! (and a server)\n");
+            // printf("*****I'm a Client! (and a server)\n");
         }
     }
 
@@ -155,11 +157,6 @@ namespace gTech
         GameUpdate update = {pPos.x, pPos.y, pPos.z, bPos.x, bPos.y, bPos.z, serverScore, clientScore};
         GameUpdate* dest = reinterpret_cast<GameUpdate*>(&buffer[0]);
         *dest = update;
-
-        // for(int i = 0; i < 8; i++)
-        // {
-        //     printf("buffer[%d] = %lu\n", i, buffer[i]);
-        // }
     }
 
     void Racquetball::prepClientMessage(void)
@@ -168,11 +165,6 @@ namespace gTech
         GameUpdate update = {pPos.x, pPos.y, pPos.z};
         GameUpdate* dest = reinterpret_cast<GameUpdate*>(&buffer[0]);
         *dest = update;
-
-        // for(int i = 0; i < 3; i++)
-        // {
-        //     printf("buffer[%d] = %lu\n", i, buffer[i]);
-        // }
     }
 
     void Racquetball::setupLights(void) 
@@ -240,6 +232,20 @@ namespace gTech
      
     }
 
+    void Racquetball::setupMultiPlayer(void)
+    {
+        if(isServer)
+        {
+            player2 = new Player(mSceneMgr, ourWorld, true);
+            //Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player5");
+        }
+        if(isClient)
+        {
+            // player2 = new Player(mSceneMgr, ourWorld, true);
+            // Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player2");
+        }
+    }
+
     bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
@@ -248,8 +254,10 @@ namespace gTech
 
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
+		uint32_t* currBuffer;
 
-        if(reset) {
+        if(reset) 
+        {
             mTime += evt.timeSinceLastFrame;
         }
 
@@ -358,6 +366,20 @@ namespace gTech
             ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
             ball->getBody()->setLinearVelocity(btVector3(d, e, f));
         }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+        {  
+            mToggle = 0.5;
+            gameSound->toggleSoundEffects();
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_1))
+        {
+            gameSound->lowerMusicVolume();
+        }
+
+        if(mKeyboard->isKeyDown(OIS::KC_2))
+        {
+            gameSound->raiseMusicVolume();
+        }
 
         //GameOver/Score
         if (score >= 10)
@@ -376,13 +398,18 @@ namespace gTech
         }
 
         
-        if(reset || score==10){
+        if(reset || score==10)
+        {
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
       
         //NETWORKING
+        if(!multiPlayerSetup && (isServer || isClient))
+        {
+            setupMultiPlayer();
+        }
         if (time >= 1500)
         {
             time = 0;
@@ -391,7 +418,17 @@ namespace gTech
                 prepServerMessage();
                 
                 mNet->receiveClientMessages();
+                currBuffer = mNet->getBuffer();   
+                if(mNet->isConnected())
+                {
+                    mNet->sendServerMessages(buffer);
+                }
+
                 //interpret data
+                GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
+                // printf("PaddlePosX %f\n", dest->paddle_x);
+                // printf("PaddlePosY %f\n", dest->paddle_y);
+                // printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
             } 
@@ -399,9 +436,21 @@ namespace gTech
             if(isClient)
             {
                 prepClientMessage();
-                mNet->sendClientMessages(buffer);           
+                mNet->sendClientMessages(buffer);   
+                mNet->receiveServerMessages(); 
+                currBuffer = mNet->getBuffer();       
 
                 //interpret data
+                GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
+                // printf("PaddlePosX %f\n", dest->paddle_x);
+                // printf("PaddlePosY %f\n", dest->paddle_y);
+                // printf("PaddlePosZ %f\n", dest->paddle_z);
+                // printf("BallPosX %f\n", dest->ball_x);
+                // printf("BallPosY %f\n", dest->ball_y);
+                // printf("BallPosZ %f\n", dest->ball_z);
+                // printf("ServerScore %d\n", dest->serverScore);
+                // printf("ClientScore %d\n", dest->clientScore);
+                
 
                 //Set Server Position
                 //Set Ball Position
@@ -422,10 +471,11 @@ namespace gTech
                 int numContacts = contactManifold->getNumContacts();
                 for (int j=0;j<numContacts;j ++)
                 {
+
                     btManifoldPoint& pt = contactManifold->getContactPoint(j);
                     if (pt.getDistance()<0.0000f)
                     {
-                        printf("Ball and player");
+                        // printf("Ball and player");
                         hitPaddle = true;
                     }
                 }
@@ -441,7 +491,7 @@ namespace gTech
                     btManifoldPoint& pt = contactManifold->getContactPoint(j);
                     if (pt.getDistance()<0.0000f && mCollision <= 0.0f)
                     {
-                        printf("Ball and wall \n\n");
+                        // printf("Ball and wall \n\n");
                         //std::cout << hitPaddle;
                         mCollision = 0.5f;
                         if(hitPaddle) {

@@ -26,11 +26,13 @@ class Player
 		btRigidBody *body;
 	public:
 		Player(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld);
+		Player(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld, bool play2);
 		~Player();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
 
 		Ogre::SceneNode* playerNode;
+		Ogre::SceneNode* playerNode2;
 
 		void movePaddle(Ogre::Vector3 translation)
 		{			

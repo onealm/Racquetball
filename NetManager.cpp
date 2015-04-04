@@ -73,7 +73,7 @@ void NetManager::setupServer()
     exit(0);
   }
 
-  printf("Server setup!!!\n\n\n\n\n\n");
+  // printf("Server setup!!!\n\n\n\n\n\n");
 }
 
 void NetManager::setupClient()
@@ -92,7 +92,7 @@ void NetManager::setupClient()
     printf("SDLNet_TCP_Open FAILED \n");
     exit(0);
   }
-  printf("Client connected to server!!!\n\n\n\n");
+  // printf("Client connected to server!!!\n\n\n\n");
 }
 
 
@@ -125,24 +125,24 @@ void NetManager::receiveClientMessages()
   // {
     if ((num_recvd = SDLNet_TCP_Recv(csd, (void *) dest, recLength - total_recvd)) > 0)
     {
-      printf("****num_recvd: %d\n", num_recvd);
+      // printf("****num_recvd: %d\n", num_recvd);
       total_recvd += num_recvd;
       dest += num_recvd;
     }
     ++num_attempts;
   // }
 
-  printf("Received %d of %d on %d out of %d attempts.\n",
-    total_recvd, len, num_attempts, kMaxAttempts);
-  for (int i = 0; i < len / sizeof(float); ++i) 
-  {
-     printf("Recv**************buffer[%d] = %lu\n", i, buffer[i]);
-  }
+  // printf("Received %d of %d on %d out of %d attempts.\n",
+  //   total_recvd, len, num_attempts, kMaxAttempts);
+  // for (int i = 0; i < len / sizeof(float); ++i) 
+  // {
+  //    printf("Recv**************buffer[%d] = %lu\n", i, buffer[i]);
+  // }
 }
 
 void NetManager::receiveServerMessages()
 {
-  printf("GOT TO RECEIVE\n");
+  // printf("GOT TO RECEIVE\n");
   /* Wait for a connection, send data and term */
   len = sizeof(buffer);
 
@@ -152,39 +152,22 @@ void NetManager::receiveServerMessages()
   const int kMaxAttempts = 10000000;
   uint32_t* dest = reinterpret_cast<uint32_t*>(&buffer[0]);
 
-  printf("GOT TO RECEIVE22222\n");
-  /* This checks the csd if there is a pending connection.
-   * If there is one, accept that, and open a new socket for communicating */
-  if (!isOpen2) 
-  {
-    printf("I GET HERE!\n");
-    if (!(sd = SDLNet_TCP_Accept(csd))) 
-    {
-      printf("Couldn't accept client connection.\n");
-      return;
-    }
-    isOpen2 = true;
-  }
 
   int recLength = len;
 
   // while (total_recvd < recLength && num_attempts < kMaxAttempts)
   // {
-    if ((num_recvd = SDLNet_TCP_Recv(csd, (void *) dest, recLength - total_recvd)) > 0)
+    if ((num_recvd = SDLNet_TCP_Recv(sd, (void *) dest, recLength - total_recvd)) > 0)
     {
-      printf("****num_recvd: %d\n", num_recvd);
+      // printf("****num_recvd: %d\n", num_recvd);
       total_recvd += num_recvd;
       dest += num_recvd;
     }
-    ++num_attempts;
   // }
-
-  printf("Received %d of %d on %d out of %d attempts.\n",
-    total_recvd, len, num_attempts, kMaxAttempts);
-  for (int i = 0; i < len / sizeof(float); ++i) 
-  {
-     printf("Recv**************buffer[%d] = %lu\n", i, buffer[i]);
-  }
+  // for (int i = 0; i < len / sizeof(float); ++i) 
+  // {
+  //    printf("Recv**************buffer[%d] = %lu\n", i, buffer[i]);
+  // }
 }
 
 void NetManager::sendClientMessages(uint32_t *sendBuffer)
@@ -194,19 +177,19 @@ void NetManager::sendClientMessages(uint32_t *sendBuffer)
   int bytesSent = 0;
   len = 32;
    
-  printf("len is %d\n", len);
+  // printf("len is %d\n", len);
 
   for (int i = 0; i < len/sizeof(uint32_t); i++)
   {
-    printf("Send: buffer[%d] is %lu\n", i, sendBuffer[i]);
+    // printf("Send: buffer[%d] is %lu\n", i, sendBuffer[i]);
   }
 
   //printf("buffer0 is %f\n\n\n\n\n\n", buffer[0]);
   bytesSent = SDLNet_TCP_Send(sd, (void *)sendBuffer, len);
-  printf("***bytesSent: %d\n", bytesSent);
+  // printf("***bytesSent: %d\n", bytesSent);
   if (bytesSent < len)
   {
-    fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError()); 
+    // fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError()); 
     exit(EXIT_FAILURE);
   }
 }
@@ -218,20 +201,24 @@ void NetManager::sendServerMessages(uint32_t *sendBuffer)
   int bytesSent = 0;
   len = 32;
    
-  printf("len is %d\n", len);
+  // printf("len is %d\n", len);
 
   for (int i = 0; i < len/sizeof(uint32_t); i++)
   {
-    printf("Send: buffer[%d] is %lu\n", i, sendBuffer[i]);
+    // printf("Send: buffer[%d] is %lu\n", i, sendBuffer[i]);
   }
 
   //printf("buffer0 is %f\n\n\n\n\n\n", buffer[0]);
   bytesSent = SDLNet_TCP_Send(csd, (void *)sendBuffer, len);
-  printf("***bytesSent: %d\n", bytesSent);
+  // printf("***bytesSent: %d\n", bytesSent);
   if (bytesSent < len)
   {
-    fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError()); 
+    // fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError()); 
     exit(EXIT_FAILURE);
   }
 }
 
+uint32_t* NetManager::getBuffer(void)
+{
+  return buffer;
+}

@@ -39,6 +39,7 @@ namespace gTech {
 		    virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		    virtual void prepServerMessage(void);
 		    virtual void prepClientMessage(void);
+		    virtual void setupMultiPlayer(void);
 		    
 		    //GUI
 		    OgreBites::Label* scoreLabel;
