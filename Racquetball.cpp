@@ -414,7 +414,7 @@ namespace gTech
             fpscore = 0;
             spscore = 0;
             Ogre::stringstream ss;
-            ss << fpscore;
+            ss << fpscore << " to " << spscore;
             std::string str = ss.str();
 
             std::string s = "Score: " + str;
@@ -576,7 +576,7 @@ namespace gTech
                                 hitSecondPaddle = false;
                             }
                             Ogre::stringstream ss;
-                            ss << fpscore;
+                            ss << fpscore << " to " << spscore;
                             std::string str = ss.str();
 
                             std::string s = "Score: " + str;
