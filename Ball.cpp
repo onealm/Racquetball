@@ -27,6 +27,25 @@ Ball::Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld)
     addToWorld(ballNode, ourWorld);
 }
 
+Ball::Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld, bool isMulti) 
+{
+
+	//Create ball
+	Ogre::Entity* ball = scnMgr->createEntity("sphere.mesh");
+	ball->setMaterialName("Ogre/Eyes");
+	ball->setCastShadows(true);
+
+	//Attach ball to node
+	ballNode = scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 900, -500));
+	ballNode->attachObject(ball);
+	ballNode->scale(0.4f,0.4f,0.4f);
+
+	//Set ball properties
+	bRadius = 40.0f;
+
+    //addToWorld(ballNode, ourWorld);
+}
+
 Ball::~Ball(void)
 {
 }

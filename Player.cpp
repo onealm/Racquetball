@@ -33,7 +33,7 @@ namespace gTech {
 		//player->setCastShadows(true);
 		player2->setMaterialName("Examples/Rocky");
 		//Attach ball to node
-		playerNode2 = scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 800, 0));
+		playerNode2 = scnMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 500, 0));
 		playerNode2->attachObject(player2);
 
 
@@ -44,6 +44,11 @@ namespace gTech {
 
 	Player::~Player(void)
 	{
+	}
+
+	Ogre::SceneNode * Player::getPlayerNode2(void)
+	{
+		return playerNode2;
 	}
 
 	void Player::addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld)

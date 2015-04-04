@@ -29,6 +29,8 @@ class Player
 		Player(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld, bool play2);
 		~Player();
 
+		Ogre::SceneNode * getPlayerNode2(void);
+
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);
 
 		Ogre::SceneNode* playerNode;

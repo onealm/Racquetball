@@ -23,6 +23,8 @@ const int kBufferSize = 1024; // 1024 bytes
 uint32_t buffer[8];
 bool isOpen, isOpen2;
 
+const char* hostName = "hundred-grand.cs.utexas.edu";
+
 NetManager::NetManager()
 {
   //bool isServer = true;
@@ -80,7 +82,7 @@ void NetManager::setupClient()
 {
   /* Resolve the host we are connecting to */
   //if (SDLNet_ResolveHost(&ip, "peanut-head-bug.cs.utexas.edu", 2000) < 0)
-  if (SDLNet_ResolveHost(&ip, "localhost", 2000) < 0)
+  if (SDLNet_ResolveHost(&ip, hostName, 2000) < 0)
   {
     printf("SDLNet_ResolveHost FAILED\n");
     exit(0);

@@ -20,6 +20,7 @@ class Ball
 
 	public:
 		Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld);
+		Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld, bool isMulti); 
 		~Ball();
 
 		virtual void addToWorld(Ogre::SceneNode *newBtNode, btDiscreteDynamicsWorld *ourWorld);

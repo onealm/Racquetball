@@ -187,7 +187,10 @@ namespace gTech
         trail->setInitialColour(0, 1.0, 0.8, 0); 
         trail->setColourChange(0, 0.5, 0.5, 0.5, 0.5); 
         trail->setInitialWidth(0, ball->bRadius); 
-        trail->addNode(mSceneMgr->getSceneNode("Ball")); 
+        if(!isClient)
+        {
+            trail->addNode(mSceneMgr->getSceneNode("Ball")); 
+        } 
     }
     //---------------------------------------------------------------------------
 
@@ -241,8 +244,12 @@ namespace gTech
         }
         if(isClient)
         {
-            // player2 = new Player(mSceneMgr, ourWorld, true);
+            player2 = new Player(mSceneMgr, ourWorld, true);
+            Ogre::SceneNode *playerNode2 = player2->getPlayerNode2();
+            //mSceneMgr->destroySceneNode("Ball");
+            //ball = new Ball(mSceneMgr, ourWorld, true);
             // Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player2");
+            //Change self paddle to top paddle
         }
     }
 
@@ -255,6 +262,12 @@ namespace gTech
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
 		uint32_t* currBuffer;
+
+        //NETWORKING
+        if(!multiPlayerSetup && (isServer || isClient))
+        {
+            setupMultiPlayer();
+        }
 
         if(reset) 
         {
@@ -363,8 +376,12 @@ namespace gTech
             if(c){
                 f = -f;
             }
-            ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
-            ball->getBody()->setLinearVelocity(btVector3(d, e, f));
+            if(!isClient)
+            {
+                ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
+                ball->getBody()->setLinearVelocity(btVector3(d, e, f));
+            }
+            
         }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
         {  
@@ -402,14 +419,13 @@ namespace gTech
         {
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
-        ball->moveBall();
+        if(!isClient)
+        {
+            ball->moveBall();
+        }
         player->movePaddle(transVector * evt.timeSinceLastFrame);
       
         //NETWORKING
-        if(!multiPlayerSetup && (isServer || isClient))
-        {
-            setupMultiPlayer();
-        }
         if (time >= 1500)
         {
             time = 0;
@@ -431,6 +447,7 @@ namespace gTech
                 // printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
+                //player2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
             if(isClient)
@@ -451,7 +468,6 @@ namespace gTech
                 // printf("ServerScore %d\n", dest->serverScore);
                 // printf("ClientScore %d\n", dest->clientScore);
                 
-
                 //Set Server Position
                 //Set Ball Position
                 //Set Scores    
@@ -467,48 +483,56 @@ namespace gTech
             btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
             btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
 
-            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == player->playerNode)) {
-                int numContacts = contactManifold->getNumContacts();
-                for (int j=0;j<numContacts;j ++)
-                {
-
-                    btManifoldPoint& pt = contactManifold->getContactPoint(j);
-                    if (pt.getDistance()<0.0000f)
-                    {
-                        // printf("Ball and player");
-                        hitPaddle = true;
-                    }
-                }
-            }
-
-            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) 
+            if(!isClient)
             {
-                int numContacts = contactManifold->getNumContacts();
-                
-                for (int j=0;j<1;j++)
+                if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == player->playerNode)) 
                 {
-                                           
-                    btManifoldPoint& pt = contactManifold->getContactPoint(j);
-                    if (pt.getDistance()<0.0000f && mCollision <= 0.0f)
+                    int numContacts = contactManifold->getNumContacts();
+                    for (int j=0;j<numContacts;j ++)
                     {
-                        // printf("Ball and wall \n\n");
-                        //std::cout << hitPaddle;
-                        mCollision = 0.5f;
-                        if(hitPaddle) {
-                            score++;
-                            gameSound->playScore();
-                            hitPaddle = false;
+
+                        btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                        if (pt.getDistance()<0.0000f)
+                        {
+                            // printf("Ball and player");
+                            hitPaddle = true;
                         }
-                        Ogre::stringstream ss;
-                        ss << score;
-                        std::string str = ss.str();
-
-                        std::string s = "Score: " + str;
-                        scoreLabel->setCaption(Ogre::DisplayString(s)); 
-
                     }
                 }
+
+                if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) 
+                {
+                    int numContacts = contactManifold->getNumContacts();
+                    
+                    for (int j=0;j<1;j++)
+                    {
+                                               
+                        btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                        if (pt.getDistance()<0.0000f && mCollision <= 0.0f)
+                        {
+                            // printf("Ball and wall \n\n");
+                            //std::cout << hitPaddle;
+                            mCollision = 0.5f;
+                            if(hitPaddle) {
+                                score++;
+                                gameSound->playScore();
+                                hitPaddle = false;
+                            }
+                            Ogre::stringstream ss;
+                            ss << score;
+                            std::string str = ss.str();
+
+                            std::string s = "Score: " + str;
+                            scoreLabel->setCaption(Ogre::DisplayString(s)); 
+
+                        }
+                    }
+                }
+
             }
+            
+
+            
         }
 
         return true;
