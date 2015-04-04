@@ -565,32 +565,32 @@ namespace gTech
                             // printf("Ball and wall \n\n");
                             //std::cout << hitPaddle;
                             mCollision = 0.5f;
-                            if(hitFirstPaddle) {
+                            if(hitFirstPaddle && !isClient) {
                                 serverScore++;
                                 gameSound->playScore();
                                 hitFirstPaddle = false;
                             }
-                            if(hitSecondPaddle){
+                            if(hitSecondPaddle && !isClient){
                                 clientScore++;
                                 gameSound->playScore();
                                 hitSecondPaddle = false;
                             }
-                            Ogre::stringstream ss;
-                            ss << serverScore << " to " << clientScore;
-                            std::string str = ss.str();
-
-                            std::string s = "Score: " + str;
-                            scoreLabel->setCaption(Ogre::DisplayString(s)); 
-
+                            
                         }
                     }
                 }
 
             }
+
             
             
         }
+        Ogre::stringstream ss;
+        ss << serverScore << " to " << clientScore;
+        std::string str = ss.str();
 
+        std::string s = "Score: " + str;
+        scoreLabel->setCaption(Ogre::DisplayString(s)); 
         return true;
     }
 
