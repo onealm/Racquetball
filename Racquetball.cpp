@@ -23,6 +23,7 @@ namespace gTech
     bool isClient;
     bool isServer;
     bool hitPaddle;
+    bool destroyedWidgets = false;
     bool reset = false;
 
     uint32_t buffer[7];
@@ -210,7 +211,9 @@ namespace gTech
 
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
-        mTime += evt.timeSinceLastFrame;
+        if(reset) {
+            mTime += evt.timeSinceLastFrame;
+        }
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
 
@@ -258,6 +261,11 @@ namespace gTech
         }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
         {
+            if(!destroyedWidgets) {
+                mTrayMgr->destroyWidget(winCondition);
+                mTrayMgr->destroyWidget(startGame);
+                destroyedWidgets = true;
+                }
             reset = true;
             mToggle = 0.5;
             int a = rand()%2;
