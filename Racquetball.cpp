@@ -254,8 +254,6 @@ namespace gTech
         }
 
 
-        mTime += evt.timeSinceLastFrame;
-
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
 
