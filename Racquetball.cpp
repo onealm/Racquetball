@@ -11,8 +11,6 @@ namespace gTech
 {
 
     int time;
-    int fpscore;
-    int spscore;
 
     bool reset = false;
 
@@ -79,8 +77,8 @@ namespace gTech
         initPhysics();
 
         time = 0;
-        fpscore = 0;
-        spscore = 0;
+        serverScore = 0;
+        clientScore = 0;
         //Ambient Light
         mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
         mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -266,7 +264,7 @@ namespace gTech
     bool Racquetball::keyPressed( const OIS::KeyEvent& evt )
     {
         BaseApplication::keyPressed( evt );
-        if(fpscore != 10 || spscore != 10)
+        if(serverScore != 10 || clientScore != 10)
         {
             switch (evt.key)
             {
@@ -411,10 +409,10 @@ namespace gTech
                 destroyedWidgets = true;
             }
             mTime = 0;
-            fpscore = 0;
-            spscore = 0;
+            serverScore = 0;
+            clientScore = 0;
             Ogre::stringstream ss;
-            ss << fpscore << " to " << spscore;
+            ss << serverScore << " to " << clientScore;
             std::string str = ss.str();
 
             std::string s = "Score: " + str;
@@ -446,7 +444,7 @@ namespace gTech
         }
 
         //GameOver/Score
-        if (fpscore >= 10 || spscore >= 10)
+        if (serverScore >= 10 || clientScore >= 10)
         {
             gameOver->setCaption(Ogre::DisplayString("Game Over!"));
         }
@@ -462,7 +460,7 @@ namespace gTech
         }
 
         
-        if(reset || fpscore==10 || spscore==10)
+        if(reset || serverScore==10 || clientScore==10)
         {
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
@@ -568,17 +566,17 @@ namespace gTech
                             //std::cout << hitPaddle;
                             mCollision = 0.5f;
                             if(hitFirstPaddle) {
-                                fpscore++;
+                                serverScore++;
                                 gameSound->playScore();
                                 hitFirstPaddle = false;
                             }
                             if(hitSecondPaddle){
-                                spscore++;
+                                clientScore++;
                                 gameSound->playScore();
                                 hitSecondPaddle = false;
                             }
                             Ogre::stringstream ss;
-                            ss << fpscore << " to " << spscore;
+                            ss << serverScore << " to " << clientScore;
                             std::string str = ss.str();
 
                             std::string s = "Score: " + str;
