@@ -44,6 +44,14 @@ class Ball
 			ballNode->setOrientation(quat);
 		}
 
+		void moveBallTo(Ogre::Vector3 newPosition){
+			btTransform trans;
+			ballBody->getMotionState()->getWorldTransform(trans);
+			trans.setOrigin(btVector3(newPosition.x, newPosition.y, newPosition.z));
+			ballNode->setPosition(newPosition);
+			ballBody->setWorldTransform(trans);
+		}
+
 		Ogre::Real bRadius;
 		btRigidBody* getBody() { return ballBody; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }

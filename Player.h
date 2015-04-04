@@ -52,7 +52,7 @@ class Player
 
 		void movePaddleTo(Ogre::Vector3 newPosition){
 			
-						transform.getOrigin() = btVector3(newPosition.x, newPosition.y, newPosition.z);
+						transform.setOrigin(btVector3(newPosition.x, newPosition.y, newPosition.z));
 						playerNode2->setPosition(newPosition);
 			
 			body->setWorldTransform(transform);

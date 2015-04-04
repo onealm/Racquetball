@@ -402,7 +402,7 @@ namespace gTech
                 mTrayMgr->destroyWidget(winCondition);
                 mTrayMgr->destroyWidget(startGame);
                 destroyedWidgets = true;
-                }
+            }
             mTime = 0;
             score = 0;
             Ogre::stringstream ss;
@@ -492,6 +492,7 @@ namespace gTech
                 //Set Client Position
                 //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
                 player2->movePaddleTo(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                ball->moveBallTo(Ogre::Vector3(dest->ball_x, dest->ball_y, dest->ball_z));
             } 
 
             if(isClient)
