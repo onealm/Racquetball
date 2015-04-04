@@ -21,7 +21,7 @@ Improved Camera Controls
 Background Music
 Particle Effects
 Game States
-Networking experience lag, but is up and working
+Networking is up and working
 Improved Collision Detection, and Physics
 
-Our documentation is contained in "Assignment 3.2 Outline.pdf"
+Our documentation is contained in "FinalProjectUpdate.txt"

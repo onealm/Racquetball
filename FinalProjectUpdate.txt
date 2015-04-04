@@ -5,3 +5,24 @@ Stephen Ridings (sjr94)
 Edgar Treto (et6482)
 
 Assignment 3 Final Project Update:
+
+We thought networking would take less time, and it would have,
+if not for the fact that we tried to use Wade's SDL_Net wrapper.
+We spent numerous days trying to figure it out, but in the end,
+we scrapped it. Doing everything from scratch turned out to only need
+about 2 days.
+
+Because we spent so long on networking and fixing the physics, we did 
+not get to upgrade our game much past the requirements, though we did have
+some previous upgrades that did not get counted for extra credit before.
+
+The physics improved rapidly after we removed the player model. We were
+having trouble programatically finding the paddle in the bullet world.
+
+Improvements:
+
+-The game finally works completely and is relatively fast.
+-The physics/bullet is fully functional. It helped to have two people 
+working on it.
+-We were able to improve latency by using buffered input so that we
+could send and receive every frame.
