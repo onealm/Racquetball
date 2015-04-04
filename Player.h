@@ -49,6 +49,14 @@ class Player
 			}
 			body->setWorldTransform(transform);
 		}
+
+		void movePaddleTo(Ogre::Vector3 newPosition){
+			
+						transform.getOrigin() = btVector3(newPosition.x, newPosition.y, newPosition.z);
+						playerNode2->setPosition(newPosition);
+			
+			body->setWorldTransform(transform);
+		}
 		
 		Ogre::SceneNode* getNode() { return playerNode; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }

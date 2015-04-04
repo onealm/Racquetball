@@ -490,7 +490,8 @@ namespace gTech
                 printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
-                playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                player2->movePaddleTo(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
             if(isClient)
