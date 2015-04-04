@@ -11,12 +11,20 @@ class NetManager
     NetManager(void);
     virtual ~NetManager(void);
 
-    void receiveMessages(void);
-    void sendMessages(uint32_t *buffer);
-
-  protected:
+    //Setup
     void setupServer(void);
     void setupClient(void);
+
+    bool isConnected(void);
+
+    //Receive
+    void receiveClientMessages(void);
+    void receiveServerMessages(void);
+
+    //Send
+    void sendServerMessages(uint32_t *buffer);
+    void sendClientMessages(uint32_t *buffer);
+    
 
 };
 
