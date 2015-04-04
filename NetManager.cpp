@@ -23,7 +23,7 @@ const int kBufferSize = 1024; // 1024 bytes
 uint32_t buffer[8];
 bool isOpen, isOpen2;
 
-const char* hostName = "hundred-grand.cs.utexas.edu";
+const char* hostName = "jelly-belly.cs.utexas.edu";
 
 NetManager::NetManager()
 {

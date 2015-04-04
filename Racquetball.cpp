@@ -11,7 +11,8 @@ namespace gTech
 {
 
     int time;
-    int score;
+    int fpscore;
+    int spscore;
 
     bool reset = false;
 
@@ -29,7 +30,8 @@ namespace gTech
     static Ogre::Real mMove = 1250;
 
     const int gameTime = 10;
-    bool hitPaddle;
+    bool hitFirstPaddle;
+    bool hitSecondPaddle;
     bool destroyedWidgets = false;
 
 
@@ -77,7 +79,8 @@ namespace gTech
         initPhysics();
 
         time = 0;
-        score = 0;
+        fpscore = 0;
+        spscore = 0;
         //Ambient Light
         mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
         mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -254,12 +257,13 @@ namespace gTech
             // Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player2");
             //Change self paddle to top paddle
         }
+        multiPlayerSetup = true;
     }
 
     bool Racquetball::keyPressed( const OIS::KeyEvent& evt )
     {
         BaseApplication::keyPressed( evt );
-        if(score != 10)
+        if(fpscore != 10 || spscore != 10)
         {
             switch (evt.key)
             {
@@ -404,9 +408,10 @@ namespace gTech
                 destroyedWidgets = true;
             }
             mTime = 0;
-            score = 0;
+            fpscore = 0;
+            spscore = 0;
             Ogre::stringstream ss;
-            ss << score;
+            ss << fpscore;
             std::string str = ss.str();
 
             std::string s = "Score: " + str;
@@ -438,7 +443,7 @@ namespace gTech
         }
 
         //GameOver/Score
-        if (score >= 10)
+        if (fpscore >= 10 || spscore >= 10)
         {
             gameOver->setCaption(Ogre::DisplayString("Game Over!"));
         }
@@ -454,7 +459,7 @@ namespace gTech
         }
 
         
-        if(reset || score==10)
+        if(reset || fpscore==10 || spscore==10)
         {
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
@@ -469,7 +474,7 @@ namespace gTech
 
 
         //NETWORKING
-        if (time >= 1500)
+        if (time >= 250)
         {
             time = 0;
             if(isServer)
@@ -492,7 +497,6 @@ namespace gTech
                 //Set Client Position
                 //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
                 player2->movePaddleTo(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
-                ball->moveBallTo(Ogre::Vector3(dest->ball_x, dest->ball_y, dest->ball_z));
             } 
 
             if(isClient)
@@ -504,6 +508,7 @@ namespace gTech
 
                 //interpret data
                 GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
+                ball->moveBallTo(Ogre::Vector3(dest->ball_x, dest->ball_y, dest->ball_z));
                 // printf("PaddlePosX %f\n", dest->paddle_x);
                 // printf("PaddlePosY %f\n", dest->paddle_y);
                 // printf("PaddlePosZ %f\n", dest->paddle_z);
@@ -541,8 +546,19 @@ namespace gTech
                         if (pt.getDistance()<0.0000f)
                         {
                             // printf("Ball and player");
-                            hitPaddle = true;
+                            hitFirstPaddle = true;
                         }
+                    }
+                }
+                else if (isServer || isClient){
+                    if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == player2->playerNode2)){
+                    int numContacts = contactManifold->getNumContacts();
+                    for(int j=0; j<numContacts; ++j){
+                        btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                        if(pt.getDistance()<0.0000f){
+                            hitSecondPaddle = true;
+                        }
+                    }
                     }
                 }
 
@@ -559,13 +575,18 @@ namespace gTech
                             // printf("Ball and wall \n\n");
                             //std::cout << hitPaddle;
                             mCollision = 0.5f;
-                            if(hitPaddle) {
-                                score++;
+                            if(hitFirstPaddle) {
+                                fpscore++;
                                 gameSound->playScore();
-                                hitPaddle = false;
+                                hitFirstPaddle = false;
+                            }
+                            if(hitSecondPaddle){
+                                spscore++;
+                                gameSound->playScore();
+                                hitSecondPaddle = false;
                             }
                             Ogre::stringstream ss;
-                            ss << score;
+                            ss << fpscore;
                             std::string str = ss.str();
 
                             std::string s = "Score: " + str;
