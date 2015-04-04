@@ -33,6 +33,7 @@ namespace gTech
 
     //Networking
     NetManager *mNet;
+    Ogre::SceneNode *playerNode2;
     bool isClient = false;
     bool isServer = false;
     bool multiPlayerSetup = false;
@@ -245,7 +246,7 @@ namespace gTech
         if(isClient)
         {
             player2 = new Player(mSceneMgr, ourWorld, true);
-            Ogre::SceneNode *playerNode2 = player2->getPlayerNode2();
+            playerNode2 = player2->getPlayerNode2();
             //mSceneMgr->destroySceneNode("Ball");
             //ball = new Ball(mSceneMgr, ourWorld, true);
             // Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player2");
@@ -447,7 +448,7 @@ namespace gTech
                 // printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
-                //player2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
             if(isClient)
