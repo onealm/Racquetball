@@ -314,6 +314,13 @@ namespace gTech
                 destroyedWidgets = true;
                 }
             score = 0;
+            Ogre::stringstream ss;
+            ss << score;
+            std::string str = ss.str();
+
+            std::string s = "Score: " + str;
+            scoreLabel->setCaption(Ogre::DisplayString(s)); 
+
             reset = true;
             mToggle = 0.5;
             int a = rand()%2;
