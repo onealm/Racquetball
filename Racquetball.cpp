@@ -253,13 +253,14 @@ namespace gTech
             mTime += evt.timeSinceLastFrame;
         }
 
-
-        mToggle -= evt.timeSinceLastFrame;
-        mCollision -= evt.timeSinceLastFrame;
+            mToggle -= evt.timeSinceLastFrame;
+            mCollision -= evt.timeSinceLastFrame;
+        
 
         time++;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+        if(score != 10){
         
         //Networking
         if (mKeyboard->isKeyDown(OIS::KC_H) && !isClient && !isServer)
@@ -306,6 +307,21 @@ namespace gTech
             mToggle = 0.5;
             gameSound->toggleBackground();
         }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
+        {  
+            mToggle = 0.5;
+            gameSound->toggleSoundEffects();
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_1))
+        {
+            gameSound->lowerMusicVolume();
+        }
+
+        if(mKeyboard->isKeyDown(OIS::KC_2))
+        {
+            gameSound->raiseMusicVolume();
+        }
+    }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
         {
             if(!destroyedWidgets) {
@@ -313,6 +329,7 @@ namespace gTech
                 mTrayMgr->destroyWidget(startGame);
                 destroyedWidgets = true;
                 }
+            mTime = 0;
             score = 0;
             Ogre::stringstream ss;
             ss << score;
@@ -341,20 +358,6 @@ namespace gTech
             ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
             ball->getBody()->setLinearVelocity(btVector3(d, e, f));
         }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-        {  
-            mToggle = 0.5;
-            gameSound->toggleSoundEffects();
-        }
-        if(mKeyboard->isKeyDown(OIS::KC_1))
-        {
-            gameSound->lowerMusicVolume();
-        }
-
-        if(mKeyboard->isKeyDown(OIS::KC_2))
-        {
-            gameSound->raiseMusicVolume();
-        }
 
         //GameOver/Score
         if (score >= 10)
@@ -373,7 +376,7 @@ namespace gTech
         }
 
         
-        if(reset){
+        if(reset || score==10){
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
         ball->moveBall();

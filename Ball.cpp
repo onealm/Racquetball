@@ -46,7 +46,7 @@ void Ball::addToWorld(Ogre::SceneNode *newBtBode, btDiscreteDynamicsWorld *ourWo
 	shape->calculateLocalInertia(mass, localInertia);
 	btDefaultMotionState *motionState = new btDefaultMotionState(transform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
-	rbInfo.m_restitution = 0.9f;
+	rbInfo.m_restitution = 1.0f;
 	rbInfo.m_friction = 0;
 	ballBody = new btRigidBody(rbInfo);
 	ballBody->setUserPointer((void *)(newBtBode));

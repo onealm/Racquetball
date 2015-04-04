@@ -32,7 +32,7 @@ class Ball
 			ballBody->getMotionState()->getWorldTransform(transform);
 
 			btVector3 velocity = ballBody->getLinearVelocity();
-			ballBody->setLinearVelocity(1.000001*velocity);
+			ballBody->setLinearVelocity(1.00001*velocity);
 
 			btVector3 pos = transform.getOrigin();
 			ballNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
