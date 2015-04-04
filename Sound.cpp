@@ -81,21 +81,21 @@ bool Sound::load_files()
 void Sound::playHit()
 {
 	 if ((Mix_PlayChannel( -1, hit, 0 )) == -1)
-	 	printf("Not playing hit\n\n\n\n\n");
+	 	printf(" ");
 
 }
 
 void Sound::playHit2()
 {
 	 if ((Mix_PlayChannel( -1, hit2, 0 )) == -1)
-	 	printf("Not playing hit2\n\n\n\n\n");
+	 	printf(" ");
 
 }
 
 void Sound::playScore()
 {
 	 if ((Mix_PlayChannel( -1, score, 0 )) == -1)
-	 	printf("Not playing score\n\n\n\n\n");
+	 	printf(" ");
 
 }
 

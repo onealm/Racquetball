@@ -9,8 +9,13 @@ Filename:    Racquetball.cpp
 
 namespace gTech 
 {
+
     int time;
     int score;
+
+    bool reset = false;
+    bool hitPaddle;
+
     btDiscreteDynamicsWorld *ourWorld;
     PlayingRoom *playingRoom;
     Ball *ball;
@@ -18,18 +23,25 @@ namespace gTech
     Ogre::SceneNode* pNode;
     Player *player;
     Sound *gameSound;
-    NetManager *mNet;
+    std::deque<Ogre::Vector3> mWalkList;
+
     const int gameTime = 10;
+<<<<<<< HEAD
     bool isClient;
     bool isServer;
     bool hitPaddle;
     bool destroyedWidgets = false;
     bool reset = false;
+=======
+>>>>>>> 815f9ecca46e1be3dba1fffaf51a056eccb7f1f0
 
-    uint32_t buffer[7];
-    // Uint16 port = 77777;
-    // TCPSocket *hostSocket;
-    // TCPSocket *clientSocket;
+    //Networking
+    NetManager *mNet;
+    bool isClient = false;
+    bool isServer = false;
+    uint32_t buffer[8];
+    int serverScore;
+    int clientScore;
 
     //---------------------------------------------------------------------------
     Racquetball::Racquetball(void)
@@ -115,27 +127,57 @@ namespace gTech
     void Racquetball::setupNetworking(void)
     {
         mNet = new NetManager();
+
+        if(isServer)
+        {
+            mNet->setupServer();
+            printf("*****I'm a Server! (and a client)\n");
+        }
+
+        if(isClient)
+        {
+            mNet->setupClient();
+            printf("*****I'm a Client! (and a server)\n");
+        }
     }
 
-    struct GameUpdate {
-        float ball_x;
-        float ball_y;
-        float ball_z;
+    struct GameUpdate 
+    {
         float paddle_x;
         float paddle_y;
         float paddle_z;
-        int score;
+        float ball_x;
+        float ball_y;
+        float ball_z;
+        int serverScore;
+        int clientScore;
     };
 
-    void Racquetball::prepMessage(void)
+    void Racquetball::prepServerMessage(void)
     {
         Ogre::Vector3 bPos = bNode->getPosition();
         Ogre::Vector3 pPos = pNode->getPosition();
-        GameUpdate update = {bPos.x, bPos.y, bPos.z, pPos.x, pPos.y, pPos.z, score};
+        GameUpdate update = {pPos.x, pPos.y, pPos.z, bPos.x, bPos.y, bPos.z, serverScore, clientScore};
         GameUpdate* dest = reinterpret_cast<GameUpdate*>(&buffer[0]);
         *dest = update;
 
-        //mNet->sendMessage(buffer);
+        // for(int i = 0; i < 8; i++)
+        // {
+        //     printf("buffer[%d] = %lu\n", i, buffer[i]);
+        // }
+    }
+
+    void Racquetball::prepClientMessage(void)
+    {
+        Ogre::Vector3 pPos = pNode->getPosition();
+        GameUpdate update = {pPos.x, pPos.y, pPos.z};
+        GameUpdate* dest = reinterpret_cast<GameUpdate*>(&buffer[0]);
+        *dest = update;
+
+        // for(int i = 0; i < 3; i++)
+        // {
+        //     printf("buffer[%d] = %lu\n", i, buffer[i]);
+        // }
     }
 
     void Racquetball::setupLights(void) 
@@ -211,21 +253,35 @@ namespace gTech
 
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
+<<<<<<< HEAD
         if(reset) {
             mTime += evt.timeSinceLastFrame;
         }
+=======
+
+        mTime += evt.timeSinceLastFrame;
+>>>>>>> 815f9ecca46e1be3dba1fffaf51a056eccb7f1f0
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
 
         time++;
-        isServer = true;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
         
-        // if (mKeyboard->isKeyDown(OIS::KC_H)) // Forward
-        // {
-        //     isServer = false;
-        // }
+        //Networking
+        if (mKeyboard->isKeyDown(OIS::KC_H) && !isClient && !isServer)
+        {
+            isServer = true;
+            setupNetworking();
+
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_J) && !isClient && !isServer)
+        {
+            isClient = true;
+            setupNetworking();
+        }
+
+        //Movement
         if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
         {
             transVector.z -= mMove;
@@ -234,12 +290,10 @@ namespace gTech
         if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
         {
             transVector.z += mMove;
-            //gameSound->playHit(); //REMOVE
         }
         if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
         {
             transVector.x -= mMove;
-            //gameSound->playHit2(); //REMOVE
         }
         if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
         {
@@ -300,6 +354,8 @@ namespace gTech
         {
             gameSound->raiseMusicVolume();
         }
+
+        //GameOver/Score
         if (score >= 10)
         {
             gameOver->setCaption(Ogre::DisplayString("Game Over!"));
@@ -315,27 +371,40 @@ namespace gTech
             gameOver->setCaption(Ogre::DisplayString(s2));
         }
 
-        //mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-        //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
+        
         if(reset){
             ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
         }
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
-
+      
+        //NETWORKING
         if (time >= 1500)
         {
             time = 0;
-            if (isServer)
+            if(isServer)
             {
-                mNet->receiveMessages();
+                prepServerMessage();
+                
+                mNet->receiveClientMessages();
+                //interpret data
+
+                //Set Client Position
             } 
-            else
+
+            if(isClient)
             {
-                prepMessage();
-                mNet->sendMessages(buffer);
+                prepClientMessage();
+                mNet->sendClientMessages(buffer);           
+
+                //interpret data
+
+                //Set Server Position
+                //Set Ball Position
+                //Set Scores    
             }
         }
+        
 
         int numManifolds = ourWorld->getDispatcher()->getNumManifolds();
         for(int i = 0; i < numManifolds; i++) 
@@ -379,8 +448,10 @@ namespace gTech
                         Ogre::stringstream ss;
                         ss << score;
                         std::string str = ss.str();
+
                         std::string s = "Score: " + str;
                         scoreLabel->setCaption(Ogre::DisplayString(s)); 
+
                     }
                 }
             }
