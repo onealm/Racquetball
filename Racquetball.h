@@ -12,6 +12,7 @@ Filename:    Racquetball.h
 #include <btBulletDynamicsCommon.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string>
 #include "Ball.h"
 #include "Player.h"

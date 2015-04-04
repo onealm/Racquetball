@@ -13,6 +13,9 @@ namespace gTech
     int time;
     int score;
 
+    bool reset = false;
+    bool hitPaddle;
+
     btDiscreteDynamicsWorld *ourWorld;
     PlayingRoom *playingRoom;
     Ball *ball;
@@ -57,8 +60,7 @@ namespace gTech
         btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
     
         ourWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
-
-        ourWorld->setGravity(btVector3(0,-45.80,0));
+        ourWorld->setGravity(btVector3(0,-45.80f,0));
     }
 
     //---------------------------------------------------------------------------
@@ -201,10 +203,10 @@ namespace gTech
         mCamera = mSceneMgr->createCamera("PlayerCam");
 
         //Set Camera Position 
-        mCamera->setPosition(Ogre::Vector3(0, 400, 1750));
+        mCamera->setPosition(Ogre::Vector3(0, 600, 1750));
 
         //Set Camera Direction
-        mCamera->lookAt(Ogre::Vector3(0, 750, -1000));
+        mCamera->lookAt(Ogre::Vector3(0, 0, -1000));
 
         //Set Near Clip Distance
         mCamera->setNearClipDistance(5);
@@ -237,13 +239,15 @@ namespace gTech
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
-        static Ogre::Real mMove = 500;
+        static Ogre::Real mMove = 1250;
+
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
 
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
-        
+        mCollision -= evt.timeSinceLastFrame;
+
         time++;
 
         Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
@@ -280,12 +284,40 @@ namespace gTech
             transVector.x += mMove;
             //gameSound->playScore(); //REMOVE
         }
-
-        //Sound
+        if(mMouse->getMouseState().buttonDown(OIS::MB_Left))
+        {
+            transVector.y += mMove;
+        }
+        if(mMouse->getMouseState().buttonDown(OIS::MB_Right))
+        {
+            transVector.y -= mMove;
+        }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
         {
             mToggle = 0.5;
             gameSound->toggleBackground();
+        }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
+        {
+            reset = true;
+            mToggle = 0.5;
+            int a = rand()%2;
+            int b = rand()%2;
+            int c = rand()%2;
+            float d = (rand() % 1000 + 1);
+            float e = (rand() % 1000 + 1);
+            float f = (rand() % 1000 + 1);    
+            if(a){
+                d = -d;
+            }
+            if(b){
+                e = -e;
+            }
+            if(c){
+                f = -f;
+            }
+            ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
+            ball->getBody()->setLinearVelocity(btVector3(d, e, f));
         }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
         {  
@@ -296,6 +328,7 @@ namespace gTech
         {
             gameSound->lowerMusicVolume();
         }
+
         if(mKeyboard->isKeyDown(OIS::KC_2))
         {
             gameSound->raiseMusicVolume();
@@ -317,9 +350,11 @@ namespace gTech
             gameOver->setCaption(Ogre::DisplayString(s2));
         }
 
-        ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
+        
+        if(reset){
+            ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
+        }
         ball->moveBall();
-        playingRoom->moveRoom();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
       
         //NETWORKING
@@ -357,28 +392,46 @@ namespace gTech
             btPersistentManifold* contactManifold =  ourWorld->getDispatcher()->getManifoldByIndexInternal(i);
             btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
             btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
+
+            if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == player->playerNode)) {
+                int numContacts = contactManifold->getNumContacts();
+                for (int j=0;j<numContacts;j ++)
+                {
+
+                    btManifoldPoint& pt = contactManifold->getContactPoint(j);
+                    if (pt.getDistance()<0.0000f)
+                    {
+                        printf("Ball and player");
+                        hitPaddle = true;
+                    }
+                }
+            }
+
             if((obA->getUserPointer() == ball->ballNode) && (obB->getUserPointer() == playingRoom->wall4Node)) 
             {
-                //std::cout << "Success";
-            
                 int numContacts = contactManifold->getNumContacts();
+                
                 for (int j=0;j<1;j++)
                 {
+                                           
                     btManifoldPoint& pt = contactManifold->getContactPoint(j);
-                    if (pt.getDistance()<0.0000f && mCollision < 0.0f)
+                    if (pt.getDistance()<0.0000f && mCollision <= 0.0f)
                     {
-                        const btVector3& ptA = pt.getPositionWorldOnA();
-                        const btVector3& ptB = pt.getPositionWorldOnB();
-                        const btVector3& normalOnB = pt.m_normalWorldOnB;
-                        score++;
+                        printf("Ball and wall \n\n");
+                        //std::cout << hitPaddle;
                         mCollision = 0.5f;
+                        if(hitPaddle) {
+                            score++;
+                            gameSound->playScore();
+                            hitPaddle = false;
+                        }
                         Ogre::stringstream ss;
                         ss << score;
                         std::string str = ss.str();
 
                         std::string s = "Score: " + str;
                         scoreLabel->setCaption(Ogre::DisplayString(s)); 
-                        gameSound->playScore();
+
                     }
                 }
             }
@@ -400,7 +453,7 @@ extern "C"
         {
             // Create application object
             gTech::Racquetball app;
-
+            srand(time(NULL));
             try {
                 app.go();
             } 
