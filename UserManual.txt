@@ -1,4 +1,4 @@
-USER MANUAL
+USER MANUAL (for scrubs, plebs, and noobs)
 
 Objective: To hit the ball as many times as possible within a set amount of time. (Currently not fully working. Instead, score updates on time to show some sort of score)
 
@@ -7,16 +7,22 @@ Movement:
 
 Camera Controls:
 	
-	The camera can be controlled with the arrow keys.
-
-	Experimental:
-		Hold Shift and use the movement controls to change 
-		the base camera position. 
-		It's best to stay behind the player.
+	The camera moves with the paddle in a prodominately third person over the shoulder style. You can move the paddle 
+	with WASD key, and alter the verticle position with the mouse clicks. You can rotate and look around with the 
+	camera using the mouse.
 
 	Turning the mouse turns the camera.
 
-	The camera also follows the player.
+	You can sprint, by holding the shift key.
+
+Start(1p or 2p):
+	Press SPACE bar to start a single player round of the game. You may also use the space bar to restart any mode of 
+	the game.
+
+Multiplayer:
+	Press H to initialize the server. (This must be done first).
+	Press J to initialize client side. Must be done on same computer. Other computer require the Local_host must be 
+	changed to the server name of the computer the client is running on. 
 
 Pause Music:
 	Press P to pause music.
