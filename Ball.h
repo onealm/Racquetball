@@ -33,7 +33,10 @@ class Ball
 			ballBody->getMotionState()->getWorldTransform(transform);
 
 			btVector3 velocity = ballBody->getLinearVelocity();
-			ballBody->setLinearVelocity(1.00005*velocity);
+			if(velocity[0] > 3000 || velocity[1] > 3000 || velocity[2] > 3000){}
+			else{
+				ballBody->setLinearVelocity(1.00005*velocity);
+			}
 
 			btVector3 pos = transform.getOrigin();
 			ballNode->setPosition(Ogre::Vector3((float)pos[0], (float)pos[1], (float)pos[2]));
