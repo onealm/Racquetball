@@ -44,7 +44,7 @@ class Ball
 		}
 
 		Ogre::Real bRadius;
-		Ogre::SceneNode* getNode() { return ballNode; }
+		btRigidBody* getBody() { return ballBody; }
 		void setPlayingRoom(PlayingRoom * pr) { playingRoom = pr; }
 
 };

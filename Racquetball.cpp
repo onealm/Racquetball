@@ -23,6 +23,7 @@ namespace gTech
     bool isClient;
     bool isServer;
     bool hitPaddle;
+    bool reset = false;
 
     uint32_t buffer[7];
     // Uint16 port = 77777;
@@ -54,8 +55,7 @@ namespace gTech
         btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
     
         ourWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
-
-        ourWorld->setGravity(btVector3(0,-45.80,0));
+        ourWorld->setGravity(btVector3(0,-45.80f,0));
     }
 
     //---------------------------------------------------------------------------
@@ -204,20 +204,14 @@ namespace gTech
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
         static Ogre::Real mRotate = 0.13;   // The rotate constant
-<<<<<<< HEAD
         static Ogre::Real mMove = 1250;
-=======
-        static Ogre::Real mMove = 1000;
->>>>>>> 04786bd3c787ab7ba256b62ba864b0c686a1d45a
+
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
         mTime += evt.timeSinceLastFrame;
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
-<<<<<<< HEAD
-        
-=======
->>>>>>> 04786bd3c787ab7ba256b62ba864b0c686a1d45a
+
         time++;
         isServer = true;
 
@@ -260,6 +254,28 @@ namespace gTech
             mToggle = 0.5;
             gameSound->toggleBackground();
         }
+        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
+        {
+            reset = true;
+            mToggle = 0.5;
+            int a = rand()%2;
+            int b = rand()%2;
+            int c = rand()%2;
+            float d = (rand() % 1000 + 1);
+            float e = (rand() % 1000 + 1);
+            float f = (rand() % 1000 + 1);    
+            if(a){
+                d = -d;
+            }
+            if(b){
+                e = -e;
+            }
+            if(c){
+                f = -f;
+            }
+            ball->getBody()->getWorldTransform().setOrigin(btVector3(0, 900, -500));
+            ball->getBody()->setLinearVelocity(btVector3(d, e, f));
+        }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
         {  
             mToggle = 0.5;
@@ -291,7 +307,9 @@ namespace gTech
 
         //mSceneMgr->getSceneNode("Player")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
         //mSceneMgr->getSceneNode("Player")->setPosition(transVector * evt.timeSinceLastFrame);
-        ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
+        if(reset){
+            ourWorld->stepSimulation(evt.timeSinceLastFrame, 1, 1.0f/60.0f);
+        }
         ball->moveBall();
         player->movePaddle(transVector * evt.timeSinceLastFrame);
 
@@ -375,7 +393,7 @@ extern "C"
         {
             // Create application object
             gTech::Racquetball app;
-
+            srand(time(NULL));
             try {
                 app.go();
             } 
