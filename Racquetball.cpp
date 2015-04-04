@@ -14,7 +14,7 @@ namespace gTech
     int score;
 
     bool reset = false;
-    bool hitPaddle;
+
 
     btDiscreteDynamicsWorld *ourWorld;
     PlayingRoom *playingRoom;
@@ -26,14 +26,9 @@ namespace gTech
     std::deque<Ogre::Vector3> mWalkList;
 
     const int gameTime = 10;
-<<<<<<< HEAD
-    bool isClient;
-    bool isServer;
     bool hitPaddle;
     bool destroyedWidgets = false;
-    bool reset = false;
-=======
->>>>>>> 815f9ecca46e1be3dba1fffaf51a056eccb7f1f0
+
 
     //Networking
     NetManager *mNet;
@@ -253,14 +248,14 @@ namespace gTech
 
         static Ogre::Real mTime = 0;
         static Ogre::Real mCollision = 0.0;
-<<<<<<< HEAD
+
         if(reset) {
             mTime += evt.timeSinceLastFrame;
         }
-=======
+
 
         mTime += evt.timeSinceLastFrame;
->>>>>>> 815f9ecca46e1be3dba1fffaf51a056eccb7f1f0
+
         mToggle -= evt.timeSinceLastFrame;
         mCollision -= evt.timeSinceLastFrame;
 
@@ -320,6 +315,7 @@ namespace gTech
                 mTrayMgr->destroyWidget(startGame);
                 destroyedWidgets = true;
                 }
+            score = 0;
             reset = true;
             mToggle = 0.5;
             int a = rand()%2;

@@ -19,10 +19,10 @@ Ball::Ball(Ogre::SceneManager* scnMgr, btDiscreteDynamicsWorld *ourWorld)
 	//Attach ball to node
 	ballNode = scnMgr->getRootSceneNode()->createChildSceneNode("Ball", Ogre::Vector3(0, 900, -500));
 	ballNode->attachObject(ball);
-	ballNode->scale(0.2f,0.2f,0.2f);
+	ballNode->scale(0.4f,0.4f,0.4f);
 
 	//Set ball properties
-	bRadius = 20.0f;
+	bRadius = 40.0f;
 
     addToWorld(ballNode, ourWorld);
 }
