@@ -9,6 +9,9 @@ The main class is Raquetball, along with several subclasses to aid the functioni
 
 
 INSTRUCTIONS:
+First, change hostName in NetManager.cpp to whatever the host
+is. Save and build.
+
 To build, use ./buildit from the command line, then use ./Racquetball to run.
 
 UserManual.txt details the controls.
