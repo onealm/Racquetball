@@ -17,7 +17,8 @@ Extra:
 Improved Camera Controls
 Background Music
 Particle Effects
-A little bit of end condition. We have a timer that counts down and says
-"Game Over!", but the game doesn't stop yet.
+Game States
+Networking experience lag, but is up and working
+Improved Collision Detection, and Physics
 
 Our documentation is contained in "Assignment 3.2 Outline.pdf"
