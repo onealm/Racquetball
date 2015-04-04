@@ -11,6 +11,7 @@ namespace gTech
 {
 
     int time;
+    int time2;
     int score;
 
     bool reset = false;
@@ -25,6 +26,7 @@ namespace gTech
     Player *player2;
     Sound *gameSound;
     std::deque<Ogre::Vector3> mWalkList;
+    Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
     const int gameTime = 10;
     bool hitPaddle;
@@ -254,6 +256,85 @@ namespace gTech
         }
     }
 
+    bool Racquetball::keyPressed( const OIS::KeyEvent& evt )
+    {
+        static Ogre::Real mMove = 1250;
+
+        if(score != 10)
+        {
+            switch (evt.key)
+            {
+                //Networking
+                case OIS::KC_H:
+                    if(!isClient && !isServer)
+                    {
+                        isServer = true;
+                        setupNetworking();
+                    }
+                    break;
+                case OIS::KC_J:
+                    if(!isClient && !isServer)
+                    {
+                        isClient = true;
+                        setupNetworking();
+                    }
+                //Sounds
+                case OIS::KC_P:
+                    gameSound->toggleBackground();    
+                    break;
+                case OIS::KC_M:
+                    gameSound->toggleSoundEffects();
+                    break;
+                case OIS::KC_1:
+                    gameSound->lowerMusicVolume();
+                    break;
+                case OIS::KC_2:
+                    gameSound->raiseMusicVolume();
+                    break;
+                //Movement
+                case OIS::KC_W:
+                    transVector.z -= mMove;
+                    gameSound->playSwoosh();
+                    break;
+                case OIS::KC_S:
+                    transVector.z += mMove;
+                    break;
+                case OIS::KC_A:
+                    transVector.x -= mMove;
+                    break;
+                case OIS::KC_D:
+                    transVector.x += mMove;
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return true;
+    }
+
+    bool Racquetball::keyReleased( const OIS::KeyEvent& evt )
+    {
+        switch (evt.key)
+        {
+            //Movement
+            case OIS::KC_W:
+                transVector.z = 0;
+                break;
+            case OIS::KC_S:
+                transVector.z = 0;
+                break;
+            case OIS::KC_A:
+                transVector.x = 0;
+                break;
+            case OIS::KC_D:
+                transVector.x = 0;
+                break;
+            default:
+                break;
+        }
+    }
+
     bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
@@ -264,6 +345,7 @@ namespace gTech
         static Ogre::Real mCollision = 0.0;
 		uint32_t* currBuffer;
 
+        transVector.y = 0;
         //NETWORKING
         if(!multiPlayerSetup && (isServer || isClient))
         {
@@ -275,75 +357,48 @@ namespace gTech
             mTime += evt.timeSinceLastFrame;
         }
 
-            mToggle -= evt.timeSinceLastFrame;
-            mCollision -= evt.timeSinceLastFrame;
+        mToggle -= evt.timeSinceLastFrame;
+        mCollision -= evt.timeSinceLastFrame;
         
 
         time++;
+        time2++;
 
-        Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-        if(score != 10){
-        
-        //Networking
-        if (mKeyboard->isKeyDown(OIS::KC_H) && !isClient && !isServer)
+        // Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+        if(score != 10)
         {
-            isServer = true;
-            setupNetworking();
 
-        }
-        if(mKeyboard->isKeyDown(OIS::KC_J) && !isClient && !isServer)
-        {
-            isClient = true;
-            setupNetworking();
-        }
+            // //Movement
+            // if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+            // {
+            //     transVector.z -= mMove;
+            //     gameSound->playSwoosh();
+            // }
+            // if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+            // {
+            //     transVector.z += mMove;
+            // }
+            // if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
+            // {
+            //     transVector.x -= mMove;
+            // }
+            // if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
+            // {
+            //     transVector.x += mMove;
+            //     //gameSound->playScore(); //REMOVE
+            // }
+            if(mMouse->getMouseState().buttonDown(OIS::MB_Left))
+            {
+                transVector.y += mMove;
+            }
+            if(mMouse->getMouseState().buttonDown(OIS::MB_Right))
+            {
+                transVector.y -= mMove;
+            }
 
-        //Movement
-        if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
-        {
-            transVector.z -= mMove;
-            gameSound->playSwoosh();
-        }
-        if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
-        {
-            transVector.z += mMove;
-        }
-        if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
-        {
-            transVector.x -= mMove;
-        }
-        if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
-        {
-            transVector.x += mMove;
-            //gameSound->playScore(); //REMOVE
-        }
-        if(mMouse->getMouseState().buttonDown(OIS::MB_Left))
-        {
-            transVector.y += mMove;
-        }
-        if(mMouse->getMouseState().buttonDown(OIS::MB_Right))
-        {
-            transVector.y -= mMove;
-        }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_P))
-        {
-            mToggle = 0.5;
-            gameSound->toggleBackground();
-        }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-        {  
-            mToggle = 0.5;
-            gameSound->toggleSoundEffects();
-        }
-        if(mKeyboard->isKeyDown(OIS::KC_1))
-        {
-            gameSound->lowerMusicVolume();
+
         }
 
-        if(mKeyboard->isKeyDown(OIS::KC_2))
-        {
-            gameSound->raiseMusicVolume();
-        }
-    }
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
         {
             if(!destroyedWidgets) {
@@ -384,20 +439,6 @@ namespace gTech
             }
             
         }
-        if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_M))
-        {  
-            mToggle = 0.5;
-            gameSound->toggleSoundEffects();
-        }
-        if(mKeyboard->isKeyDown(OIS::KC_1))
-        {
-            gameSound->lowerMusicVolume();
-        }
-
-        if(mKeyboard->isKeyDown(OIS::KC_2))
-        {
-            gameSound->raiseMusicVolume();
-        }
 
         //GameOver/Score
         if (score >= 10)
@@ -426,6 +467,10 @@ namespace gTech
         }
         player->movePaddle(transVector * evt.timeSinceLastFrame);
       
+
+
+
+
         //NETWORKING
         if (time >= 1500)
         {
@@ -448,7 +493,7 @@ namespace gTech
                 // printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
-                playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
             if(isClient)
@@ -476,6 +521,7 @@ namespace gTech
         }
         
 
+        //PHYSICS
         int numManifolds = ourWorld->getDispatcher()->getNumManifolds();
         for(int i = 0; i < numManifolds; i++) 
         {
@@ -532,7 +578,6 @@ namespace gTech
 
             }
             
-
             
         }
 

@@ -50,6 +50,10 @@ namespace gTech {
 		    //Netmanager
 		    NetManager *mNet;
 
+		    //Input
+		    virtual bool keyPressed( const OIS::KeyEvent& evt );
+		    virtual bool keyReleased( const OIS::KeyEvent& evt );
+
 		private:
 			virtual void initPhysics(void);
 			virtual bool processUnbufferedInput(const Ogre::FrameEvent& evt);
