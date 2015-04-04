@@ -54,6 +54,9 @@ namespace gTech {
 		    virtual bool keyPressed( const OIS::KeyEvent& evt );
 		    virtual bool keyReleased( const OIS::KeyEvent& evt );
 
+		    virtual bool mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
+			virtual bool mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
+
 		private:
 			virtual void initPhysics(void);
 			virtual bool processUnbufferedInput(const Ogre::FrameEvent& evt);

@@ -11,7 +11,6 @@ namespace gTech
 {
 
     int time;
-    int time2;
     int score;
 
     bool reset = false;
@@ -27,6 +26,7 @@ namespace gTech
     Sound *gameSound;
     std::deque<Ogre::Vector3> mWalkList;
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+    static Ogre::Real mMove = 1250;
 
     const int gameTime = 10;
     bool hitPaddle;
@@ -258,8 +258,7 @@ namespace gTech
 
     bool Racquetball::keyPressed( const OIS::KeyEvent& evt )
     {
-        static Ogre::Real mMove = 1250;
-
+        BaseApplication::keyPressed( evt );
         if(score != 10)
         {
             switch (evt.key)
@@ -315,6 +314,7 @@ namespace gTech
 
     bool Racquetball::keyReleased( const OIS::KeyEvent& evt )
     {
+        BaseApplication::keyReleased( evt );
         switch (evt.key)
         {
             //Movement
@@ -335,6 +335,39 @@ namespace gTech
         }
     }
 
+    bool Racquetball::mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id )
+    {
+        BaseApplication::mousePressed( evt, id );
+        switch (id)
+        {
+            case OIS::MB_Left:
+                transVector.y += mMove;
+                break;
+            case OIS::MB_Right:
+                transVector.y -= mMove;
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+    bool Racquetball::mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id )
+    {
+        BaseApplication::mousePressed( evt, id );
+        switch (id)
+        {
+            case OIS::MB_Left:
+                transVector.y = 0;
+                break;
+            case OIS::MB_Right:
+                transVector.y = 0;
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
     bool Racquetball::processUnbufferedInput(const Ogre::FrameEvent& evt)
     {
         static Ogre::Real mToggle = 0.0;    // The time left until next toggle
@@ -345,7 +378,7 @@ namespace gTech
         static Ogre::Real mCollision = 0.0;
 		uint32_t* currBuffer;
 
-        transVector.y = 0;
+        //transVector.y = 0;     
         //NETWORKING
         if(!multiPlayerSetup && (isServer || isClient))
         {
@@ -362,42 +395,6 @@ namespace gTech
         
 
         time++;
-        time2++;
-
-        // Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-        if(score != 10)
-        {
-
-            // //Movement
-            // if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
-            // {
-            //     transVector.z -= mMove;
-            //     gameSound->playSwoosh();
-            // }
-            // if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
-            // {
-            //     transVector.z += mMove;
-            // }
-            // if (mKeyboard->isKeyDown(OIS::KC_A)) // Left
-            // {
-            //     transVector.x -= mMove;
-            // }
-            // if (mKeyboard->isKeyDown(OIS::KC_D)) // Right
-            // {
-            //     transVector.x += mMove;
-            //     //gameSound->playScore(); //REMOVE
-            // }
-            if(mMouse->getMouseState().buttonDown(OIS::MB_Left))
-            {
-                transVector.y += mMove;
-            }
-            if(mMouse->getMouseState().buttonDown(OIS::MB_Right))
-            {
-                transVector.y -= mMove;
-            }
-
-
-        }
 
         if (mToggle < 0.0f && mKeyboard->isKeyDown(OIS::KC_SPACE))
         {
@@ -488,12 +485,12 @@ namespace gTech
 
                 //interpret data
                 GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
-                // printf("PaddlePosX %f\n", dest->paddle_x);
-                // printf("PaddlePosY %f\n", dest->paddle_y);
-                // printf("PaddlePosZ %f\n", dest->paddle_z);
+                printf("PaddlePosX %f\n", dest->paddle_x);
+                printf("PaddlePosY %f\n", dest->paddle_y);
+                printf("PaddlePosZ %f\n", dest->paddle_z);
 
                 //Set Client Position
-                //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
             if(isClient)
