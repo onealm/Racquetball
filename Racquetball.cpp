@@ -246,12 +246,15 @@ namespace gTech
         if(isServer)
         {
             player2 = new Player(mSceneMgr, ourWorld, true);
+            multiPlayerSetup = true;
+
             //Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player5");
         }
         if(isClient)
         {
             player2 = new Player(mSceneMgr, ourWorld, true);
             playerNode2 = player2->getPlayerNode2();
+            multiPlayerSetup = true;
             //mSceneMgr->destroySceneNode("Ball");
             //ball = new Ball(mSceneMgr, ourWorld, true);
             // Ogre::SceneNode* playerNode2 = mSceneMgr->getSceneNode("Player2");
@@ -474,7 +477,7 @@ namespace gTech
 
 
         //NETWORKING
-        if (time >= 250)
+        if (true)
         {
             time = 0;
             if(isServer)
@@ -490,12 +493,8 @@ namespace gTech
 
                 //interpret data
                 GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
-                printf("PaddlePosX %f\n", dest->paddle_x);
-                printf("PaddlePosY %f\n", dest->paddle_y);
-                printf("PaddlePosZ %f\n", dest->paddle_z);
 
-                //Set Client Position
-                //playerNode2->setPosition(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
+                //Set Pos
                 player2->movePaddleTo(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
             } 
 
@@ -508,19 +507,10 @@ namespace gTech
 
                 //interpret data
                 GameUpdate* dest = reinterpret_cast<GameUpdate*>(&currBuffer[0]);
+
+                //Set Pos
+                player2->movePaddleTo(Ogre::Vector3(dest->paddle_x, dest->paddle_y, dest->paddle_z));
                 ball->moveBallTo(Ogre::Vector3(dest->ball_x, dest->ball_y, dest->ball_z));
-                // printf("PaddlePosX %f\n", dest->paddle_x);
-                // printf("PaddlePosY %f\n", dest->paddle_y);
-                // printf("PaddlePosZ %f\n", dest->paddle_z);
-                // printf("BallPosX %f\n", dest->ball_x);
-                // printf("BallPosY %f\n", dest->ball_y);
-                // printf("BallPosZ %f\n", dest->ball_z);
-                // printf("ServerScore %d\n", dest->serverScore);
-                // printf("ClientScore %d\n", dest->clientScore);
-                
-                //Set Server Position
-                //Set Ball Position
-                //Set Scores    
             }
         }
         
