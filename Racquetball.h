@@ -40,6 +40,8 @@ namespace gTech {
 		    
 		    //GUI
 		    OgreBites::Label* scoreLabel;
+		    OgreBites::Label* winCondition;
+		    OgreBites::Label* startGame;
 		    OgreBites::Label* gameOver;
 
 		    //Netmanager

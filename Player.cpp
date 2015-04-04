@@ -14,7 +14,7 @@ namespace gTech {
 		//Create ball
 		Ogre::Entity* player = scnMgr->createEntity("Player1", "cube.mesh");
 
-		player->setCastShadows(true);
+		//player->setCastShadows(true);
 		player->setMaterialName("Examples/Rocky");
 		//Attach ball to node
 		playerNode = scnMgr->getRootSceneNode()->createChildSceneNode("Player", Ogre::Vector3(0, 500, 0));

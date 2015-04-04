@@ -196,6 +196,8 @@ namespace gTech
         
         //Label for score. Change with setCaption(const Ogre::DisplayString& caption)
         scoreLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "ScoreLabel", "Score: 0", 400);
+        winCondition = mTrayMgr->createLabel(OgreBites::TL_RIGHT, "winLabel", "First to 10 wins.", 200);
+        startGame = mTrayMgr->createLabel(OgreBites::TL_LEFT, "startLabel", "Press SPACE to begin.", 200);
         gameOver = mTrayMgr->createLabel(OgreBites::TL_BOTTOM, "GameOver", "Time Left: " + gameTime, 300);
      
     }
@@ -304,7 +306,6 @@ namespace gTech
                 int numContacts = contactManifold->getNumContacts();
                 for (int j=0;j<numContacts;j ++)
                 {
-
                     btManifoldPoint& pt = contactManifold->getContactPoint(j);
                     if (pt.getDistance()<0.0000f)
                     {
